@@ -2,9 +2,7 @@ package io.jqn.popularmoviesapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
+import android.widget.GridView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,9 +11,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get a reference to the ImageView
-        ImageView imageView = findViewById(R.id.imageCell);
-        // load an image into the ImageView
-        Picasso.get().load("http://i.imgur.com/DvpvklR.png").into(imageView);
+        GridView gv = findViewById(R.id.grid_view);
+        gv.setAdapter(new GridViewAdapter(this));
+        gv.setOnScrollListener(new ScrollListener(this));
     }
 }
