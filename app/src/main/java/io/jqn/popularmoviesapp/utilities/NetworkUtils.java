@@ -21,12 +21,12 @@ public class NetworkUtils {
 
     private static final String BASE_URL = "https://api.themoviedb.org/3";
 
-    private static final String API_KEY = "";
+    private static final String API_KEY = "7a821a3d4895c7c70e2dde4b875a4881";
 
     /* The format we want the movie API to return */
     private static final String format = "json";
     /* Query parameters */
-    final static String QUERY_PARAM = "?";
+    final static String QUERY_PARAM = "api_key";
     private static final String LANGUAGE = "en-us";
     private static final String REGION = "";
     private static final String SORT_BY = "https://api.themoviedb.org/3/movie/popular?api_key=";
@@ -38,8 +38,8 @@ public class NetworkUtils {
      * @return The URL to query the MovieDB API
      **/
     public static URL buildURL(String endPoint) {
-        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                .appendQueryParameter(QUERY_PARAM, endPoint)
+        Uri builtUri = Uri.parse("https://api.themoviedb.org/3/movie/popular").buildUpon()
+                .appendQueryParameter("api_key", "7a821a3d4895c7c70e2dde4b875a4881")
                 .build();
 
         URL url = null;
@@ -70,7 +70,7 @@ public class NetworkUtils {
 
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
-                Log.v(TAG, "getResponseFromHTTp called " + scanner.next());
+                Log.v(TAG, "getResponseFromHTTp called ");
 
                 return scanner.next();
             } else {
