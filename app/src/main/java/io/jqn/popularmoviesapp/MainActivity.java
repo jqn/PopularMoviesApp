@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     /* Tell the background method to get popular movies in the background */
     private void loadMovieData() {
-        new FetchMoviesTask().execute("movie/popular");
+        new FetchMoviesTask().execute("movie", "popular");
     }
 
     // Extend AsyncTask and perform network requests
@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             String endpoint = params[0];
-            URL moviesRequestUrl = NetworkUtils.buildURL(endpoint);
+            String contentType = params[1];
+            URL moviesRequestUrl = NetworkUtils.buildURL(endpoint, contentType);
 
             try {
                 String jsonMovieREsponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
