@@ -16,31 +16,31 @@ import javax.net.ssl.HttpsURLConnection;
  */
 
 public class NetworkUtils {
-
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    private static final String BASE_URL = "https://api.themoviedb.org/3";
+    private static final String STATIC_MOVIE_DB_URL = "https://api.themoviedb.org";
 
-    private static final String API_KEY = "";
+    private static final String API_VERSION = "3";
 
-    /* The format we want the movie API to return */
-    private static final String format = "json";
-    /* Query parameters */
-    final static String QUERY_PARAM = "?";
-    private static final String LANGUAGE = "en-us";
-    private static final String REGION = "";
-    private static final String SORT_BY = "https://api.themoviedb.org/3/movie/popular?api_key=";
+    private static final String QUERY_PARAM = "api_key";
+
+    private static final String KEY = "7a821a3d4895c7c70e2dde4b875a4881";
 
     /**
      * Builds the URL used to talk to the Movie DB API
      * using a query.
+     *
      * @param movieQuery The type of movies that will be queried for.
      * @return The URL to query the MovieDB API
      **/
-    public static URL buildURL(String endPoint) {
-        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                .appendQueryParameter(QUERY_PARAM, endPoint)
+    public static URL buildURL(String mediaType, String filter) {
+        Uri builtUri = Uri.parse(STATIC_MOVIE_DB_URL).buildUpon()
+                .appendPath(API_VERSION)
+                .appendPath(mediaType)
+                .appendPath(filter)
+                .appendQueryParameter(QUERY_PARAM, KEY)
                 .build();
+
 
         URL url = null;
         try {
@@ -56,6 +56,7 @@ public class NetworkUtils {
 
     /**
      * This method returns the entire result from the HTTP response.
+     *
      * @param url the URL to fetch the HTTP response from.
      * @return The contents of the HTTP response.
      * @throws IOException Related to network and stream reading.
@@ -74,10 +75,10 @@ public class NetworkUtils {
 
                 return scanner.next();
             } else {
-                return  null;
+                return null;
             }
         } finally {
-             urlConnection.disconnect();
+            urlConnection.disconnect();
         }
     }
 

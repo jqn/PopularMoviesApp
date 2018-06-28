@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadMovieData() {
-        new FetchMoviesTask().execute("movie/popular");
+        new FetchMoviesTask().execute("movie", "popular");
     }
 
     public class FetchMoviesTask extends AsyncTask<String, Void, String[]> {
@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             String endpoint = params[0];
-            URL moviesRequestUrl = NetworkUtils.buildURL(endpoint);
+            String contentType = params[1];
+            URL moviesRequestUrl = NetworkUtils.buildURL(endpoint, contentType);
 
             try {
                 NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
