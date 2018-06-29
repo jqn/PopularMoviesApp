@@ -7,51 +7,67 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.jqn.popularmoviesapp.models.Movie;
+
 /**
  * Utility functions to handle OpenMovies JSON data.
  */
 public final class OpenMoviesJsonUtils {
     private static final String TAG = "OpenMoviesJsonUtils";
+
     /**
      * This method parses JSON from a response and returns an array of strings
      * describing popular movies.
+     *
      * @param moviesJsonStr JSON response from server.
      * @return Array of strings describing movies
      * @throws JSONException If JSON data cannot be properly parsed
      */
-    public static String[] getMoviesStringsFromJson(Context context, String moviesJsonStr) throws JSONException {
+    public static List<Movie> getMoviesStringsFromJson(Context context, String moviesJsonStr) throws JSONException {
         /* Movie list */
         final String MOVIE_LIST = "results";
         final String MOVIE_ID = "id";
         final String POSTER_PATH = "poster_path";
 
-        /* String array to hold each movie's data String */
-        String[] parsedMovieData = null;
+        // Create an empty ArrayList to add movies to.
+        List<Movie> movies = new ArrayList<>();
 
+        // Create a JSONObject from the JSON response string
         JSONObject moviesJson = new JSONObject(moviesJsonStr);
 
+        // Extract the JSONArray associated with the key called "results",
         JSONArray movieArray = moviesJson.getJSONArray(MOVIE_LIST);
 
-        parsedMovieData = new String[movieArray.length()];
 
         for (int i = 0; i < movieArray.length(); i++) {
-            String movieID;
-            String poster;
 
-            /* Get the JSON object representing the movie */
-            JSONObject movie = movieArray.getJSONObject(i);
+            /* Get the JSON object representing a movie */
+            JSONObject singleMovie = movieArray.getJSONObject(i);
 
             /* Get the movie id */
-            movieID = movie.getString(MOVIE_ID);
+            String id = singleMovie.getString(MOVIE_ID);
+
+            /* Get the movie title */
+            String title = singleMovie.getString("original_title");
+
             /* Get the movie poster */
-            poster = movie.getString(POSTER_PATH);
+            String poster = singleMovie.getString(POSTER_PATH);
 
-            Log.v(TAG, "movie id " + movieID);
+            /* Get the movie overview */
+            String overview = singleMovie.getString("overview");
 
-            parsedMovieData[i] = "id" + movieID;
+            /**
+             * Create a new Movie object with selected properties.
+             */
+            Movie movie = new Movie(id, title, poster, overview);
+
+            movies.add(movie);
         }
 
-        return parsedMovieData;
+        return movies;
 
     }
 }

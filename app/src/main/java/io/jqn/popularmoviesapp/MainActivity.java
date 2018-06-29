@@ -7,7 +7,10 @@ import android.util.Log;
 import android.widget.GridView;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 
+import io.jqn.popularmoviesapp.models.Movie;
 import io.jqn.popularmoviesapp.utilities.NetworkUtils;
 import io.jqn.popularmoviesapp.utilities.OpenMoviesJsonUtils;
 
@@ -32,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Extend AsyncTask and perform network requests
-    public class FetchMoviesTask extends AsyncTask<String, Void, String[]> {
+    public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
-        protected String[] doInBackground(String... params) {
+        protected List<Movie> doInBackground(String... params) {
             /* if there is not endpoint there is nothing to look up */
             if (params.length == 0) {
                 return null;
@@ -46,24 +49,26 @@ public class MainActivity extends AppCompatActivity {
             URL moviesRequestUrl = NetworkUtils.buildURL(endpoint, contentType);
 
             try {
-                String jsonMovieREsponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
-                String[] movieJsonData = OpenMoviesJsonUtils.getMoviesStringsFromJson(MainActivity.this, jsonMovieREsponse);
+                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
+
+                List<Movie> movieJsonData = OpenMoviesJsonUtils.getMoviesStringsFromJson(MainActivity.this, jsonMovieResponse);
+
                 return movieJsonData;
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+                return Collections.emptyList();
             }
         }
 
         @Override
-        protected void onPostExecute(String[] moviesData) {
-            if (moviesData != null) {
+        protected void onPostExecute(List<Movie> movieData) {
+            if (movieData != null) {
                 /**
                  * Iterate through array and append the strings to the GridView
                  */
-                for (String moviesString : moviesData) {
-                    Log.d(TAG, "onPostExecute: " + moviesString);
+                for (int i = 0; i < movieData.size(); i++) {
+                    Log.v(TAG, "title " + movieData.get(i).getTitle());
                 }
             }
 
