@@ -30,7 +30,11 @@ public final class OpenMoviesJsonUtils {
         /* Movie list */
         final String MOVIE_LIST = "results";
         final String MOVIE_ID = "id";
+        final String TITLE = "title";
         final String POSTER_PATH = "poster_path";
+        final String OVERVIEW = "overview";
+        final String VOTE_AVERAGE = "vote_average";
+        final String RELEASE_DATE = "release_date";
 
         // Create an empty ArrayList to add movies to.
         List<Movie> movies = new ArrayList<>();
@@ -45,19 +49,19 @@ public final class OpenMoviesJsonUtils {
         for (int i = 0; i < movieArray.length(); i++) {
 
             /* Get the JSON object representing a movie */
-            JSONObject singleMovie = movieArray.getJSONObject(i);
+            JSONObject movieJson = movieArray.getJSONObject(i);
 
             /* Get the movie id */
-            String id = singleMovie.getString(MOVIE_ID);
+            String id = movieJson.getString(MOVIE_ID);
 
             /* Get the movie title */
-            String title = singleMovie.getString("original_title");
+            String title = movieJson.getString(TITLE);
 
             /* Get the movie poster */
-            String poster = singleMovie.getString(POSTER_PATH);
+            String poster = movieJson.getString(POSTER_PATH);
 
             /* Get the movie overview */
-            String overview = singleMovie.getString("overview");
+            String overview = movieJson.getString(OVERVIEW);
 
             /**
              * Create a new Movie object with selected properties.
