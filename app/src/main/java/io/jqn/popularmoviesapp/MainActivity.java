@@ -3,6 +3,8 @@ package io.jqn.popularmoviesapp;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.GridView;
 
@@ -17,14 +19,33 @@ import io.jqn.popularmoviesapp.utilities.OpenMoviesJsonUtils;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    /**
+     * References to RecyclerView and Adapter.
+     */
+    private MoviewAdaper mAdapter;
+    private RecyclerView mMoviesList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//
+//        GridView gv = findViewById(R.id.movies);
+//        gv.setAdapter(new GridViewAdapter(this));
+//        gv.setOnScrollListener(new ScrollListener(this));
 
-        GridView gv = findViewById(R.id.grid_view);
-        gv.setAdapter(new GridViewAdapter(this));
-        gv.setOnScrollListener(new ScrollListener(this));
+        mMoviesList = findViewById(R.id.movies);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this);
+        mMoviesList.setLayoutManager(layoutManager);
+
+        mMoviesList.setHasFixedSize(true);
+        /**
+         * The movie adapter is reponsible for displaying each item in the grid.
+         */
+        mAdapter = new MovieAdapert(100);
+
+        mMoviesList.setAdapter(mAdapter);
 
         loadMovieData();
     }
