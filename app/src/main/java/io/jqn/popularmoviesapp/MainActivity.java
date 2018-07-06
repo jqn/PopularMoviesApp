@@ -42,11 +42,10 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.movies);
         mErrorMessageDisplay = findViewById(R.id.movie_error_message_display);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
 
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
-        List<Movie> movies = new ArrayList<>();
         /**
          * Use this setting to improve performance that changes in content do not change the child
          * layout size in the RecyclerView.
@@ -137,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     String mMoviePosterPath = "http://image.tmdb.org/t/p/w780/".concat(movieData.get(i).getPosterPath());
                     array.add(i, mMoviePosterPath);
                 }
-                mMovieAdapter.setMovieposters(array);
+                mMovieAdapter.setMoviePosters(array);
             } else {
                 showErrorMessage();
             }
