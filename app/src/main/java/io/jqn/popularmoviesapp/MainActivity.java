@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ import java.util.List;
 
 import io.jqn.popularmoviesapp.adapter.MovieAdapter;
 import io.jqn.popularmoviesapp.models.Movie;
+import io.jqn.popularmoviesapp.utilities.MoviesJsonUtils;
 import io.jqn.popularmoviesapp.utilities.NetworkUtils;
-import io.jqn.popularmoviesapp.utilities.OpenMoviesJsonUtils;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private MovieAdapter mMovieAdapter;
     private RecyclerView mRecyclerView;
+    private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
 
     @Override
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
          * Get a reference to the recyclerview with findViewById
          */
         mRecyclerView = findViewById(R.id.movies);
+        mErrorMessageDisplay = findViewById(R.id.movie_error_message_display);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
 
@@ -71,12 +74,18 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method will make the View for the movie data visible and
      * hide the error message.
-     * <p>
      * Since it is okay to redundantly set the visibility of a View, we don't
      * need to check whether each view is currently visible or invisible.
      */
     private void showMovieDataView() {
+        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showErrorMessage() {
+        /* First hide currently visible data */
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
     // Extend AsyncTask and perform network requests
@@ -102,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
 
-                List<Movie> movieJsonData = OpenMoviesJsonUtils.getMoviesStringsFromJson(MainActivity.this, jsonMovieResponse);
+                List<Movie> movieJsonData = MoviesJsonUtils.getMoviesStringsFromJson(MainActivity.this, jsonMovieResponse);
 
                 return movieJsonData;
 
@@ -120,13 +129,17 @@ public class MainActivity extends AppCompatActivity {
                 int count = movieData.size();
                 ArrayList<String> array = new ArrayList<>(count);
 
-                mMovieAdapter.setMovieposters(array);
                 /**
                  * Iterate through array and append the strings to the GridView
                  */
                 for (int i = 0; i < movieData.size(); i++) {
-                    Log.v(TAG, "title " + movieData.get(i).getTitle());
+                    Log.v(TAG, "poster path " + movieData.get(i).getPosterPath());
+                    String mMoviePosterPath = "http://image.tmdb.org/t/p/w780/".concat(movieData.get(i).getPosterPath());
+                    array.add(i, mMoviePosterPath);
                 }
+                mMovieAdapter.setMovieposters(array);
+            } else {
+                showErrorMessage();
             }
 
         }

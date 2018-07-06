@@ -2,6 +2,7 @@ package io.jqn.popularmoviesapp.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      */
     @Override
     public void onBindViewHolder (MovieAdapterViewHolder movieAdapterViewHolder, int position) {
+//        Log.v(TAG, "setting views");
 //        setMoviePostersOnline(movieAdapterViewHolder, position);
     }
 
@@ -86,6 +88,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      * @param moviePosters The new movie data to be displayed.
      */
     public void setMovieposters(ArrayList<String> moviePosters) {
+        for (int i = 0; i < moviePosters.size(); i++) {
+            Log.v(TAG, "setmovieposters " + moviePosters.get(i));
+        }
+        Log.v(TAG, "setting movie posters" + moviePosters.size());
         mMoviePosters.clear();
         mMoviePosters.addAll(moviePosters);
         notifyDataSetChanged();
