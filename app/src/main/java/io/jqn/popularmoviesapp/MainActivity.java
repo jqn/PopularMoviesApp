@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.GridView;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.jqn.popularmoviesapp.adapter.MovieAdapter;
 import io.jqn.popularmoviesapp.models.Movie;
 import io.jqn.popularmoviesapp.utilities.NetworkUtils;
 import io.jqn.popularmoviesapp.utilities.OpenMoviesJsonUtils;
@@ -22,28 +23,33 @@ public class MainActivity extends AppCompatActivity {
     /**
      * References to RecyclerView and Adapter.
      */
-    private MoviewAdaper mAdapter;
+    private MovieAdapter mAdapter;
     private RecyclerView mMoviesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//
-//        GridView gv = findViewById(R.id.movies);
-//        gv.setAdapter(new GridViewAdapter(this));
-//        gv.setOnScrollListener(new ScrollListener(this));
 
+        /**
+         * Get a reference to the recyclerview with findViewById
+         */
         mMoviesList = findViewById(R.id.movies);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this);
-        mMoviesList.setLayoutManager(layoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
 
+        mMoviesList.setLayoutManager(gridLayoutManager);
+
+        List<Movie> movies = new ArrayList<>();
+        /**
+         * Use this setting to improve performance that changes in content do not change the child
+         * layout size in the RecyclerView.
+         */
         mMoviesList.setHasFixedSize(true);
         /**
-         * The movie adapter is reponsible for displaying each item in the grid.
+         * The movie adapter is responsible for displaying each item in the grid.
          */
-        mAdapter = new MovieAdapert(100);
+        mAdapter = new MovieAdapter(movies);
 
         mMoviesList.setAdapter(mAdapter);
 
