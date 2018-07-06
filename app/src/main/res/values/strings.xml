@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PopularMoviesApp</string>
     <string name="poster_image">Poster Image</string>
+    <string name="error_message">Error</string>
 </resources>
