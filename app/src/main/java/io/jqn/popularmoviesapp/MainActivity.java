@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private MovieAdapter mMovieAdapter;
     private RecyclerView mRecyclerView;
+
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         /**
-         * Get a reference to the recyclerview with findViewById
+         * Get a reference to the RecyclerView with findViewById
          */
         mRecyclerView = findViewById(R.id.movies);
         mErrorMessageDisplay = findViewById(R.id.movie_error_message_display);
@@ -55,13 +56,22 @@ public class MainActivity extends AppCompatActivity {
         /**
          * The movie adapter is responsible for displaying each item in the grid.
          */
-
         mMovieAdapter = new MovieAdapter();
 
+        /**
+         * Setting the adapter attaches it to the RecyclerView in the layout.
+         */
         mRecyclerView.setAdapter(mMovieAdapter);
 
+        /**
+         * The ProgressBar that will indicate to the user that we are loading data. It will be
+         * hidden when no data is loading.
+         *
+         * Please note: This so called "ProgressBar" isn't a bar by default.
+         */
         mLoadingIndicator = findViewById(R.id.grid_loading_indicator);
 
+        /* Once all of our views are setup, we can load the movie data. */
         loadMovieData();
     }
 
@@ -81,6 +91,12 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * This method will make the error message visible and hide the movie
+     * grid View.
+     * Since it is okay to redundantly set the visibility of a View, we don't
+     * need to check whether each view is currently visible or invisible.
+     */
     private void showErrorMessage() {
         /* First hide currently visible data */
         mRecyclerView.setVisibility(View.INVISIBLE);

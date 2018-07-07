@@ -36,7 +36,8 @@ public class NetworkUtils {
      * Builds the URL used to talk to the Movie DB API
      * using a query.
      *
-     * @param movieQuery The type of movies that will be queried for.
+     * @param mediaType The type of media that will be queried for.
+     * @param filter The type of movies that will be queried for.
      * @return The URL to query the MovieDB API
      **/
     public static URL buildURL(String mediaType, String filter) {
