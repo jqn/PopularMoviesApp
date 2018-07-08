@@ -65,11 +65,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
          */
         @Override
         public void onClick(View v) {
-            Log.v(TAG, "clicked " + v);
-//            Movie currentMovie = new Movie(posterPath, orig)
-//            int adapterPostion = getAdapterPosition();
-//
-//            mClickHandler.onClick(mMovieList.get(adapterPostion));
+            int adapterPosition = getAdapterPosition();
+
+            mClickHandler.onClick(mMovies.get(adapterPosition));
         }
     }
 
