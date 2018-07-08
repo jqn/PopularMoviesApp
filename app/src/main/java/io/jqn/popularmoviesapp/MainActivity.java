@@ -1,5 +1,6 @@
 package io.jqn.popularmoviesapp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ import io.jqn.popularmoviesapp.models.Movie;
 import io.jqn.popularmoviesapp.utilities.MoviesJsonUtils;
 import io.jqn.popularmoviesapp.utilities.NetworkUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     /**
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
+
+    ArrayList<Movie> mMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * The movie adapter is responsible for displaying each item in the grid.
          */
-        mMovieAdapter = new MovieAdapter();
+        mMovieAdapter = new MovieAdapter(this);
 
         /**
          * Setting the adapter attaches it to the RecyclerView in the layout.
@@ -78,6 +81,20 @@ public class MainActivity extends AppCompatActivity {
     /* Tell the background method to get popular movies in the background */
     private void loadMovieData() {
         new FetchMoviesTask().execute("movie", "popular");
+    }
+
+    /**
+     * This method is overridden by our MainActivity class in order to handle RecyclerView item
+     * clicks.
+     *
+     * @param movie The movie that was clicked
+     */
+    public void onClick(Movie movie ) {
+        Log.v(TAG, "main activity click");
+        Intent movieDetailIntent = new Intent(MainActivity.this, MainDetailActivity.class);
+        movieDetailIntent.putExtra("Movie", movie);
+        startActivity(movieDetailIntent);
+
     }
 
     /**
@@ -152,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     String mMoviePosterPath = "http://image.tmdb.org/t/p/w780/".concat(movieData.get(i).getPosterPath());
                     array.add(i, mMoviePosterPath);
                 }
-                mMovieAdapter.setMoviePosters(array);
+                mMovieAdapter.setMoviePosters(movieData);
             } else {
                 showErrorMessage();
             }

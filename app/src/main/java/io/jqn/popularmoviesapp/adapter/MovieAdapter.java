@@ -1,7 +1,9 @@
 package io.jqn.popularmoviesapp.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,24 +12,64 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.jqn.popularmoviesapp.R;
+import io.jqn.popularmoviesapp.models.Movie;
 
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
     private static final String TAG = MovieAdapter.class.getSimpleName();
     private ArrayList<String> mMoviePosters = new ArrayList<>();
+    private List<Movie> mMovies;
+
+    /*
+     * An on-click handler that we've defined to make it easy for an Activity to interface with
+     * our RecyclerView
+     */
+    private final MovieAdapterOnClickHandler mClickHandler;
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface MovieAdapterOnClickHandler {
+        void onClick(Movie movie);
+    }
+
+    /**
+     * Creates a MovieAdapter.
+     *
+     * @param clickHandler The on-click handler for this adapter. This single handler is called
+     *                     when an item is clicked.
+     */
+    public MovieAdapter(MovieAdapterOnClickHandler clickHandler) {
+        this.mClickHandler = clickHandler;
+    }
 
     /**
      * Cache the children views for a forecast grid item
      */
-    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final ImageView mMoviePosterImageView;
 
         public MovieAdapterViewHolder(View view) {
             super(view);
             mMoviePosterImageView = view.findViewById(R.id.movie_poster);
+            view.setOnClickListener(this);
+        }
+        /**
+         * This gets called by the child views during a click.
+         *
+         * @param v The View that was clicked
+         */
+        @Override
+        public void onClick(View v) {
+            Log.v(TAG, "clicked " + v);
+//            Movie currentMovie = new Movie(posterPath, orig)
+//            int adapterPostion = getAdapterPosition();
+//
+//            mClickHandler.onClick(mMovieList.get(adapterPostion));
         }
     }
 
@@ -69,8 +111,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
     private void setMoviePostersOnline(final MovieAdapterViewHolder movieAdapterViewHolder, final  int position) {
-        String moviePoster = mMoviePosters.get(position);
-        Picasso.get().load(moviePoster).into(movieAdapterViewHolder.mMoviePosterImageView);
+        String mMoviePosterPath = mMovies.get(position).getPosterPath();
+        Log.v(TAG, "poster path: " + mMoviePosterPath);
+        Picasso.get().load("http://image.tmdb.org/t/p/w780".concat(mMoviePosterPath)).into(movieAdapterViewHolder.mMoviePosterImageView);
     }
 
     /**
@@ -81,8 +124,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      */
     @Override
     public int getItemCount() {
-        if (null == mMoviePosters) return 0;
-        return mMoviePosters.size();
+        if (null == mMovies) return 0;
+        return mMovies.size();
     }
 
     /**
@@ -90,11 +133,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      * created one. This is handy when we get new data from the web but don't want to create a
      * new movieAdapter to display it.
      *
-     * @param moviePosters The new movie data to be displayed.
+     * @param movies The new movie data to be displayed.
      */
-    public void setMoviePosters(ArrayList<String> moviePosters) {
-        mMoviePosters.clear();
-        mMoviePosters.addAll(moviePosters);
+    public void setMoviePosters(List<Movie> movies) {
+        mMovies = movies;
         notifyDataSetChanged();
     }
 }
