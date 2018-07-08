@@ -31,7 +31,8 @@ public final class MoviesJsonUtils {
         final String MOVIE_LIST = "results";
         final String MOVIE_ID = "id";
         final String TITLE = "title";
-        final String POSTER_PATH = "poster_path";
+        final String POSTER = "poster_path";
+        final String BACKDROP = "backdrop_path";
         final String OVERVIEW = "overview";
         final String VOTE_AVERAGE = "vote_average";
         final String RELEASE_DATE = "release_date";
@@ -58,7 +59,18 @@ public final class MoviesJsonUtils {
             String title = movieJson.getString(TITLE);
 
             /* Get the movie poster */
-            String poster = movieJson.getString(POSTER_PATH);
+            String poster = movieJson.getString(POSTER);
+            Log.v(TAG, "poster" + poster);
+
+            /* Get the movie backdrop */
+            String backdrop = movieJson.getString(BACKDROP);
+            Log.v(TAG, "backdrop" + backdrop);
+
+            /* Get the user rating */
+            String userRating = movieJson.getString(VOTE_AVERAGE);
+
+            /* Get the release date */
+            String releaseDate = movieJson.getString(RELEASE_DATE);
 
             /* Get the movie overview */
             String overview = movieJson.getString(OVERVIEW);
@@ -66,7 +78,7 @@ public final class MoviesJsonUtils {
             /**
              * Create a new Movie object with selected properties.
              */
-            Movie movie = new Movie(id, title, poster, overview);
+            Movie movie = new Movie(id, title, poster, backdrop, userRating, releaseDate, overview);
 
             movies.add(movie);
         }

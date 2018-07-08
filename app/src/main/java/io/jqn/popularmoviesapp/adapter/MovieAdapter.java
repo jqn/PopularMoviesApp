@@ -21,7 +21,6 @@ import io.jqn.popularmoviesapp.models.Movie;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
     private static final String TAG = MovieAdapter.class.getSimpleName();
-    private ArrayList<String> mMoviePosters = new ArrayList<>();
     private List<Movie> mMovies;
 
     /*
@@ -109,8 +108,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
     private void setMoviePostersOnline(final MovieAdapterViewHolder movieAdapterViewHolder, final  int position) {
+    Log.v(TAG, "set movies called");
         String mMoviePosterPath = mMovies.get(position).getPosterPath();
-        Log.v(TAG, "poster path: " + mMoviePosterPath);
+        /**
+         * TODO - remove hardcoded poster url
+         */
         Picasso.get().load("http://image.tmdb.org/t/p/w780".concat(mMoviePosterPath)).into(movieAdapterViewHolder.mMoviePosterImageView);
     }
 

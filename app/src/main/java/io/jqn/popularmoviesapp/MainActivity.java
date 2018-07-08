@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
 
-    ArrayList<Movie> mMovie;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void onClick(Movie movie ) {
         Log.v(TAG, "main activity click");
         Intent movieDetailIntent = new Intent(MainActivity.this, MainDetailActivity.class);
-        movieDetailIntent.putExtra("Movie", movie);
+        movieDetailIntent.putExtra("movie", movie);
         startActivity(movieDetailIntent);
 
     }
@@ -158,17 +156,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (movieData != null) {
                 showMovieDataView();
-                int count = movieData.size();
-                ArrayList<String> array = new ArrayList<>(count);
-
-                /**
-                 * Iterate through array and append the strings to the GridView
-                 */
-                for (int i = 0; i < movieData.size(); i++) {
-                    Log.v(TAG, "poster path " + movieData.get(i).getPosterPath());
-                    String mMoviePosterPath = "http://image.tmdb.org/t/p/w780/".concat(movieData.get(i).getPosterPath());
-                    array.add(i, mMoviePosterPath);
-                }
                 mMovieAdapter.setMoviePosters(movieData);
             } else {
                 showErrorMessage();

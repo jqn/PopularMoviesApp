@@ -24,13 +24,9 @@ public class NetworkUtils {
 
     private static final String KEY = "7a821a3d4895c7c70e2dde4b875a4881";
 
-    /* The format we want the movie API to return */
-    private static final String format = "json";
-    /* Query parameters */
     final static String QUERY_PARAM = "api_key";
-    private static final String LANGUAGE = "en-us";
-    private static final String REGION = "";
-    private static final String SORT_BY = "https://api.themoviedb.org/3/movie/popular?api_key=";
+
+
 
     /**
      * Builds the URL used to talk to the Movie DB API
@@ -55,8 +51,6 @@ public class NetworkUtils {
             e.printStackTrace();
         }
 
-        Log.v(TAG, "Built URI " + url);
-
         return url;
     }
 
@@ -77,8 +71,6 @@ public class NetworkUtils {
 
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
-                Log.v(TAG, "getResponseFromHTTp called ");
-
                 return scanner.next();
             } else {
                 return null;
