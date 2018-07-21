@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -74,6 +76,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         /* Once all of our views are setup, we can load the movie data. */
         loadMovieData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+        // Inflate menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     /* Tell the background method to get popular movies in the background */
