@@ -1,8 +1,6 @@
 # Popular Movies App version 1.0
 
-<img width="25%" src="demo/grid.png" style="padding-right:16px"/>
-<img width="25%" src="demo/drawer.png" style="padding-right:16px"/>
-<img width="25%" src="demo/detail.png" />
+<img width="25%" src="demo/grid.png" style="padding-right:16px"/><img width="25%" src="demo/drawer.png" style="padding-right:16px"/><img width="25%" src="demo/detail.png" />
 
 ## Project Summary
 
