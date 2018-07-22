@@ -11,16 +11,19 @@ import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import io.jqn.popularmoviesapp.BuildConfig;
+
 /**
  * Created by jqn on 6/16/18.
  */
 
 public class NetworkUtils {
+
     final static String QUERY_PARAM = "api_key";
     private static final String TAG = NetworkUtils.class.getSimpleName();
     private static final String STATIC_MOVIE_DB_URL = "https://api.themoviedb.org";
     private static final String API_VERSION = "3";
-    private static final String KEY = "7a821a3d4895c7c70e2dde4b875a4881";
+    private static final String KEY = BuildConfig.API_KEY;
 
     /**
      * Builds the URL used to talk to the Movie DB API
@@ -41,7 +44,7 @@ public class NetworkUtils {
         URL url = null;
         try {
             url = new URL(builtUri.toString());
-            Log.v(TAG, "endpoint" + url);
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
