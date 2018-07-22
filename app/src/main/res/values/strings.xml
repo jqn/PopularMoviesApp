@@ -4,4 +4,6 @@
     <string name="error_message">Error</string>
     <string name="popular">Popular</string>
     <string name="top_rated">Top Rated</string>
+    <string name="rating_label">Rating</string>
+    <string name="release_date_label">Release Date:</string>
 </resources>
