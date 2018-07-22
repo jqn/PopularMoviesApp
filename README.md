@@ -1,8 +1,10 @@
 # Popular Movies App version 1.0
 
-<p align="center"><img src="https://cdn.rawgit.com/bruno78/popular-movies-app/5b33a0a7/screenshots/Screen%20Shot%202018-05-28%20at%2011.52.18%20AM.png" width="200" alt="movie list image"> <img src="https://cdn.rawgit.com/bruno78/popular-movies-app/5b33a0a7/screenshots/Screen%20Shot%202018-05-28%20at%2011.51.41%20AM.png" width="200" alt="Movie detail"></p>
+![very good|512x397, 20%](demo/grid.png)
 
-<p align="center"><img src="https://udacity-reviews-uploads.s3.us-west-2.amazonaws.com/_attachments/6093/1527535993/May-28-2018_14-29-44.gif" alt="gif of selecting different settings"></p>
+![very good|20x20](demo/drawer.png)
+
+![very good|20x20](demo/grid.png)
 
 ## Project Summary
 
@@ -15,6 +17,8 @@ You’ll build the complete functionality of this app in two stages which you wi
 
 Download or clone this repo on your machine, open the project using Android Studio. Once Gradle builds
 the project, click "run" and choose an emulator.
+
+Please put your key in your gradle.properties `THE_MOVIE_DB_KEY="my_movie_db_key"`
 
 ## Stage 1: Main Discovery Screen, A Details View, and Settings
 
@@ -60,83 +64,3 @@ Your app will:
 - [x] App conforms to common standards found in the Android Nanodegree General Project Guidelines
       (NOTE: For Stage 1 of the Popular Movies App, it is okay if the app does not restore the data using
       onSaveInstanceState/onRestoreInstanceState)
-
-### Problems faced:
-
-1.  When scroll down the list, it goes a bit slow but ok, but when goes up, it skips and jumps to the top.
-
-**Solution:** Add these lines in the MoviesActivity:
-
-```java
-    recyclerView.setHasFixedSize(true);
-    recyclerView.setItemViewCacheSize(20);
-    recyclerView.setDrawingCacheEnabled(true);
-    recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-```
-
-and if you are using Picasso and still have these issues, add the commented lines:
-
-```java
-    Picasso.with(context)
-            .load(file)
-            .fit()
-            // .resize().centerCrop() // this is optional in case needs improvement
-            .into(imageView);
-```
-
-2.  Back button on the Action bar in the Settings menu wasn't refreshing with the new list when settings changed
-
-**Solution:** Remove `android:launchMode="singleTop"` from MainActivity section in the AndroidManifest.xml
-
-3.  Add back button to a Action bar:
-
-**Solution:** Add these lines inside of your child Activity:
-
-```xml
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.brunogtavares.popmovies.MoviesActivity"/>
-```
-
-4.  Extra space on the right of the each poster when displaying the movie grid list:
-
-**Solution:** make sure the FrameLayout that wraps the ImageView related to poster has the margin
-and padding set to 0.
-
-## Suggestions to improve the code
-
-**1. (/res/values/secrets.xml)** There is a nice approach when sharing your source code and don't want to include an API key or
-any other private data. It is to use a buildConfig property, so other developers can include their
-own key in the gradle.properties. This has some advantages like project won't build/run if a developer
-has not set an API key value besides that you can handle different api keys during building time
-depending on the build flavor like debug, release, etc
-
-Here is a link to do this in a few easy steps:
-
-https://richardroseblog.wordpress.com/2016/05/29/hiding-secret-api-keys-from-git/
-
-**2. (MovieDetailActivity.java)** You might want to use ButterKnife library to reduce boilerplate code initializing the
-views. You can easily bind these views using annotations provided by this library.
-
-For example:
-
-(code snippet gotten from the official Butterknife documentation)
-
-```java
-  class ExampleActivity extends Activity {
-     @BindView(R.id.title) TextView title;
-     @BindView(R.id.subtitle) TextView subtitle;
-     @BindView(R.id.footer) TextView footer;
-
-     @Override public void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       setContentView(R.layout.simple_activity);
-       ButterKnife.bind(this);
-       // TODO Use fields...
-     }
-   }
-```
-
-Take a look at the official documentation of this library:
-
-http://jakewharton.github.io/butterknife/
