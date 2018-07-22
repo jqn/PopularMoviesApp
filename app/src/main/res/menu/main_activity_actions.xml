@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_sort"
-        android:icon="@drawable/thumb_up"
-        android:title="@string/app_name"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/action_settings"
+        android:title="Sort movies"
+        app:showAsAction="withText"
+        />
 </menu>

@@ -2,4 +2,6 @@
     <string name="app_name">PopularMoviesApp</string>
     <string name="poster_image">Poster Image</string>
     <string name="error_message">Error</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
 </resources>

@@ -2,6 +2,10 @@ package io.jqn.popularmoviesapp;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,7 +30,10 @@ import io.jqn.popularmoviesapp.utilities.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
     private static final String TAG = MainActivity.class.getSimpleName();
-
+    /**
+     * References to the drawer menu
+     */
+    private DrawerLayout mDrawerLayout;
     /**
      * References to RecyclerView and Adapter.
      */
@@ -39,6 +47,32 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        // set item as selected to persist highlight
+                        item.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        switch (item.getItemId()) {
+                            case R.id.set_popular:
+                                Log.v(TAG, "clicked popular");
+                                loadMovieData("movie", "popular");
+                                return true;
+                            case R.id.set_trending:
+                                loadMovieData("movie", "top_rated");
+                                return true;
+                        }
+
+                        return true;
+                    }
+                }
+        );
 
         /**
          * Get a reference to the RecyclerView with findViewById
@@ -75,20 +109,33 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mLoadingIndicator = findViewById(R.id.grid_loading_indicator);
 
         /* Once all of our views are setup, we can load the movie data. */
-        loadMovieData();
+        loadMovieData("movie", "popular");
     }
 
     @Override
-    public boolean onCreateOptionsMenu (Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+
+        }
+        // If we got here the users's action was not recognized
+        return super.onOptionsItemSelected(item);
+    }
+
     /* Tell the background method to get popular movies in the background */
-    private void loadMovieData() {
-        new FetchMoviesTask().execute("movie", "popular");
+    private void loadMovieData(String media, String filter) {
+
+        new FetchMoviesTask().execute(media, filter);
     }
 
     /**
@@ -97,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
      *
      * @param movie The movie that was clicked
      */
-    public void onClick(Movie movie ) {
+    public void onClick(Movie movie) {
         Log.v(TAG, "main activity click");
         Intent movieDetailIntent = new Intent(MainActivity.this, MainDetailActivity.class);
         movieDetailIntent.putExtra("movie", movie);
