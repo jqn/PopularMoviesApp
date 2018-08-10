@@ -41,7 +41,7 @@ public class MainDetailActivity extends AppCompatActivity {
 
             Picasso.get().load("http://image.tmdb.org/t/p/w1280".concat(mMovie.getBackdropPath())).into(mBackdrop);
             Picasso.get().load("http://image.tmdb.org/t/p/w500".concat(mMovie.getPosterPath())).into(mPosterThumbnail);
-
+            setTitle(mMovie.getTitle());
             mTitle.setText(mMovie.getTitle());
             mRating.setText(mMovie.getUserRating());
             mDateReleased.setText(mMovie.getReleaseDate());

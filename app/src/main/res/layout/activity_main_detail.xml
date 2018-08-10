@@ -1,81 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainDetailActivity">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <ImageView
+        android:id="@+id/movie_backdrop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/movie_poster_thumbnail"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movie_backdrop" />
 
-        <ImageView
-            android:id="@+id/movie_backdrop"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="@dimen/horizontal_padding"
-            android:layout_marginTop="@dimen/vertical_padding">
-            <ImageView
-                android:id="@+id/movie_poster_thumbnail"
-                android:layout_width="102dp"
-                android:layout_height="146dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="@dimen/horizontal_padding">
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/material_text_title"
-                    android:textStyle="bold"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/text_horizontal_padding">
-                    <TextView
-                        android:id="@+id/rating_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rating_label"
-                        android:paddingRight="@dimen/text_horizontal_padding"
-                        android:textSize="@dimen/material_text_subhead"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/rating"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/material_text_subhead"/>
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textAlignment="viewStart"
+        android:textSize="@dimen/material_text_title"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/movie_backdrop" />
 
-                </LinearLayout>
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/material_text_subhead"
+        app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
-                <TextView
-                    android:id="@+id/release_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/material_text_subhead"/>
+    <TextView
+        android:id="@+id/release_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="@dimen/material_text_subhead"
+        app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/rating" />
 
-            </LinearLayout>
-        </LinearLayout>
 
+    <TextView
+        android:id="@+id/overview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginHorizontal="@dimen/horizontal_padding"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textAlignment="viewStart"
+        android:textSize="@dimen/material_text_body1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_poster_thumbnail" />
 
-        <TextView
-            android:id="@+id/overview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/vertical_padding"
-            android:layout_marginHorizontal="@dimen/horizontal_padding"
-            android:textSize="@dimen/material_text_body1"/>
-    </LinearLayout>
-</ScrollView>
+</android.support.constraint.ConstraintLayout>
