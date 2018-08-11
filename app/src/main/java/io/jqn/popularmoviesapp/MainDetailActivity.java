@@ -16,7 +16,6 @@ public class MainDetailActivity extends AppCompatActivity {
     private Movie mMovie;
     private ImageView mBackdrop;
     private ImageView mPosterThumbnail;
-    private TextView mTitle;
     private TextView mRating;
     private TextView mDateReleased;
     private TextView mOverview;
@@ -28,7 +27,6 @@ public class MainDetailActivity extends AppCompatActivity {
 
         mBackdrop = findViewById(R.id.movie_backdrop);
         mPosterThumbnail = findViewById(R.id.movie_poster_thumbnail);
-        mTitle = findViewById(R.id.title);
         mRating = findViewById(R.id.rating);
         mDateReleased = findViewById(R.id.release_date);
         mOverview = findViewById(R.id.overview);
@@ -42,8 +40,10 @@ public class MainDetailActivity extends AppCompatActivity {
             Picasso.get().load("http://image.tmdb.org/t/p/w1280".concat(mMovie.getBackdropPath())).into(mBackdrop);
             Picasso.get().load("http://image.tmdb.org/t/p/w500".concat(mMovie.getPosterPath())).into(mPosterThumbnail);
             setTitle(mMovie.getTitle());
-            mTitle.setText(mMovie.getTitle());
-            mRating.setText(mMovie.getUserRating());
+            String userRating = mMovie.getUserRating();
+            String newUserRating = userRating + "/10";
+
+            mRating.setText(newUserRating);
             mDateReleased.setText(mMovie.getReleaseDate());
             mOverview.setText(mMovie.getOverview());
         }

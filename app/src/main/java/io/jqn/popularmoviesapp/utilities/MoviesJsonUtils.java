@@ -51,7 +51,6 @@ public final class MoviesJsonUtils {
 
             /* Get the JSON object representing a movie */
             JSONObject movieJson = movieArray.getJSONObject(i);
-
             /* Get the movie id */
             String id = movieJson.getString(MOVIE_ID);
 
