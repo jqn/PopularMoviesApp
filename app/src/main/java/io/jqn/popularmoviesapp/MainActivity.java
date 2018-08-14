@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     /* Tell the background method to get popular movies in the background */
     private void loadMovieData(String media, String filter) {
 
-        new FetchMoviesTask().execute(media, filter);
+        new FetchMoviesTask(this).execute(media, filter);
     }
 
     /**
@@ -154,4 +154,40 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         startActivity(movieDetailIntent);
 
     }
+
+    public void showLoadingIndicator() {
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoadingIndicator() {
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * This method will make the View for the movie data visible and
+     * hide the error message.
+     * Since it is okay to redundantly set the visibility of a View, we don't
+     * need to check whether each view is currently visible or invisible.
+     */
+    public void showMovieDataView() {
+        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    public void setMoviePosters(List<Movie> movieData) {
+        mMovieAdapter.setMoviePosters(movieData);
+    }
+
+    /**
+     * This method will make the error message visible and hide the movie
+     * grid View.
+     * Since it is okay to redundantly set the visibility of a View, we don't
+     * need to check whether each view is currently visible or invisible.
+     */
+    public void showErrorMessage() {
+        /* First hide currently visible data */
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
+
 }
