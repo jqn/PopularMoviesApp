@@ -137,8 +137,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     /* Tell the background method to get popular movies in the background */
     private void loadMovieData(String media, String filter) {
-
-        new FetchMoviesTask(getApplicationContext()).execute(media, filter);
+        new FetchMoviesTask(this).execute(media, filter);
     }
 
     /**

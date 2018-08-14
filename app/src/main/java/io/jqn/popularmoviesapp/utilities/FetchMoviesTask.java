@@ -1,5 +1,6 @@
 package io.jqn.popularmoviesapp.utilities;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import java.lang.ref.WeakReference;
@@ -39,7 +40,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         try {
             String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
 
-            List<Movie> movieJsonData = MoviesJsonUtils.getMoviesStringsFromJson(mMainActivity, jsonMovieResponse);
+            List<Movie> movieJsonData = MoviesJsonUtils.getMoviesStringsFromJson(mMainActivity.get().getApplicationContext(), jsonMovieResponse);
 
             return movieJsonData;
 
