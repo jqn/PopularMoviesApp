@@ -60,3 +60,11 @@ Your app will:
 - [x] App conforms to common standards found in the Android Nanodegree General Project Guidelines
       (NOTE: For Stage 1 of the Popular Movies App, it is okay if the app does not restore the data using
       onSaveInstanceState/onRestoreInstanceState)
+
+## Stage 2: Trailers, reviews and favorites
+
+- [x] You’ll allow users to view and play trailers ( either in the youtube app or a web browser).
+- [x] You’ll allow users to read reviews of a selected movie.
+- [x] You’ll also allow users to mark a movie as a favorite in the details view by tapping a button(star).
+- [x] You'll create a database to store the names and ids of the user's favorite movies (and optionally, the rest of the information needed to display their favorites collection while offline).
+- [x] You’ll modify the existing sorting criteria for the main view to include an additional pivot to show their favorites collection.
