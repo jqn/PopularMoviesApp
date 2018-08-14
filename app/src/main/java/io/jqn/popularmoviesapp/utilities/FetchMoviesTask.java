@@ -1,6 +1,8 @@
 package io.jqn.popularmoviesapp.utilities;
 
 import android.os.AsyncTask;
+
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -11,17 +13,16 @@ import io.jqn.popularmoviesapp.models.Movie;
 // Extend AsyncTask and perform network requests
 public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
     private static final String TAG = "FetchMoviesTask";
-    private MainActivity mMainActivity;
+    private final WeakReference<MainActivity> mMainActivity;
 
-    public FetchMoviesTask(MainActivity mainActivityInstance) {
-        this.mMainActivity = mainActivityInstance;
-
+    public FetchMoviesTask(MainActivity activity) {
+        mMainActivity = new WeakReference<>(activity);
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mMainActivity.showLoadingIndicator();
+        mMainActivity.get().showLoadingIndicator();
     }
 
     @Override
@@ -50,12 +51,12 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
     @Override
     protected void onPostExecute(List<Movie> movieData) {
-        mMainActivity.hideLoadingIndicator();
+        mMainActivity.get().hideLoadingIndicator();
         if (movieData != null) {
-            mMainActivity.showMovieDataView();
-            mMainActivity.setMoviePosters(movieData);
+            mMainActivity.get().showMovieDataView();
+            mMainActivity.get().setMoviePosters(movieData);
         } else {
-            mMainActivity.showErrorMessage();
+            mMainActivity.get().showErrorMessage();
         }
 
     }
