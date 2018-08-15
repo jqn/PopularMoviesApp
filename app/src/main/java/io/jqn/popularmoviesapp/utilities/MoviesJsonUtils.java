@@ -26,7 +26,7 @@ public final class MoviesJsonUtils {
      * @return Array of strings describing movies
      * @throws JSONException If JSON data cannot be properly parsed
      */
-    public static List<Movie> getMoviesStringsFromJson(Context context, String moviesJsonStr) throws JSONException {
+    public static List<Movie> getMoviesStringsFromJson(String moviesJsonStr) throws JSONException {
         /* Movie list */
         final String MOVIE_LIST = "results";
         final String MOVIE_ID = "id";

@@ -14,16 +14,17 @@ import io.jqn.popularmoviesapp.models.Movie;
 // Extend AsyncTask and perform network requests
 public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
     private static final String TAG = "FetchMoviesTask";
-    private final WeakReference<MainActivity> mMainActivity;
 
-    public FetchMoviesTask(MainActivity activity) {
-        mMainActivity = new WeakReference<>(activity);
+    MainActivity mainActivity;
+
+    public FetchMoviesTask(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mMainActivity.get().showLoadingIndicator();
+        this.mainActivity.showLoadingIndicator();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         try {
             String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
 
-            List<Movie> movieJsonData = MoviesJsonUtils.getMoviesStringsFromJson(mMainActivity.get().getApplicationContext(), jsonMovieResponse);
+            List<Movie> movieJsonData = MoviesJsonUtils.getMoviesStringsFromJson(jsonMovieResponse);
 
             return movieJsonData;
 
@@ -52,12 +53,12 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
     @Override
     protected void onPostExecute(List<Movie> movieData) {
-        mMainActivity.get().hideLoadingIndicator();
+        this.mainActivity.hideLoadingIndicator();
         if (movieData != null) {
-            mMainActivity.get().showMovieDataView();
-            mMainActivity.get().setMoviePosters(movieData);
+           this.mainActivity.showMovieDataView();
+            this.mainActivity.setMoviePosters(movieData);
         } else {
-            mMainActivity.get().showErrorMessage();
+            this.mainActivity.showErrorMessage();
         }
 
     }
