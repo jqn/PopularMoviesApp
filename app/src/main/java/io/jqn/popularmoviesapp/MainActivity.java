@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Set action bar title
-        setTitle("Popular Movies");
+        setTitle("Popular");
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -66,9 +66,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                             case R.id.set_popular:
                                 Log.v(TAG, "clicked popular");
                                 loadMovieData("movie", "popular");
+                                setTitle("Popular");
                                 return true;
                             case R.id.set_trending:
                                 loadMovieData("movie", "top_rated");
+                                setTitle("Top Rated");
                                 return true;
                         }
 

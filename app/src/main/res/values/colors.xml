@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white">#ffffff</color>
+    <color name="black">#000</color>
     <color name="sixtePercentGray">#999999</color>
     <color name="mediumGray">#808080</color>
     <color name="colorPrimary">#E64524</color>
-    <color name="colorPrimaryDark">#AC0000</color>
-    <color name="colorAccent">#FF7950</color>
+    <color name="colorPrimaryDark">#ac0000</color>
+    <color name="colorAccent">#ff7950</color>
 </resources>

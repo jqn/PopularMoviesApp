@@ -51,6 +51,7 @@ public final class MoviesJsonUtils {
 
             /* Get the JSON object representing a movie */
             JSONObject movieJson = movieArray.getJSONObject(i);
+
             /* Get the movie id */
             String id = movieJson.getString(MOVIE_ID);
 
@@ -59,11 +60,9 @@ public final class MoviesJsonUtils {
 
             /* Get the movie poster */
             String poster = movieJson.getString(POSTER);
-            Log.v(TAG, "poster" + poster);
 
             /* Get the movie backdrop */
             String backdrop = movieJson.getString(BACKDROP);
-            Log.v(TAG, "backdrop" + backdrop);
 
             /* Get the user rating */
             String userRating = movieJson.getString(VOTE_AVERAGE);
