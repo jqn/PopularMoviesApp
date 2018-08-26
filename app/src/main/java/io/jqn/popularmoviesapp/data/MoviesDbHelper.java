@@ -1,9 +1,9 @@
 package io.jqn.popularmoviesapp.data;
 
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+        import android.content.Context;
+        import android.database.sqlite.SQLiteDatabase;
+        import android.database.sqlite.SQLiteOpenHelper;
 
 public class MoviesDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "movies.db";
@@ -14,12 +14,17 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        final String SQL_CREATE_FAVORITE_TABLE = "CREATE TABLE" + MoviesContract.FavoritesEntry.TABLE_NAME + "(" +
+
+        final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + MoviesContract.FavoritesEntry.TABLE_NAME + " (" +
                 MoviesContract.FavoritesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 MoviesContract.FavoritesEntry.COLUMN_MOVIE_NAME + " TEXT NOT NULL, " +
-                MoviesContract.FavoritesEntry.COLUMN_MOVIE_ID + "INTEGER NOT NULL" + ");";
+                MoviesContract.FavoritesEntry.COLUMN_MOVIE_POSTER + " TEXT NOT NULL, " +
+                MoviesContract.FavoritesEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL" +
+                "); ";
 
-        sqLiteDatabase.execSQL(SQL_CREATE_FAVORITE_TABLE);
+
+
+        sqLiteDatabase.execSQL(SQL_CREATE_FAVORITES_TABLE);
     }
 
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
