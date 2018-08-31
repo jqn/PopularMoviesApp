@@ -1,7 +1,10 @@
 package io.jqn.popularmoviesapp;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,16 +21,14 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.jqn.popularmoviesapp.adapter.MovieAdapter;
+import io.jqn.popularmoviesapp.data.MoviesContract;
+import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
 import io.jqn.popularmoviesapp.utilities.FetchMoviesTask;
-import io.jqn.popularmoviesapp.utilities.MoviesJsonUtils;
-import io.jqn.popularmoviesapp.utilities.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -43,15 +44,28 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
+    /**
+     * Provide access to the movie database
+     */
+    private MoviesDbHelper mMovieDbHelper;
+
+    private SQLiteDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         // Set action bar title
-        setTitle("Popular");
+        setTitle("Popular Movies");
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        /**
+         * Instantiates a subclass of SQLiteOpenHelper to access database
+         * @params - context - the current activity
+         */
+        mMovieDbHelper = new MoviesDbHelper(this);
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -71,6 +85,28 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                             case R.id.set_trending:
                                 loadMovieData("movie", "top_rated");
                                 setTitle("Top Rated");
+                                return true;
+                            case R.id.set_favorites:
+                                mDb = mMovieDbHelper.getReadableDatabase();
+                                Cursor cursor = getFavoriteData();
+                                Log.v(TAG, "movies db" + DatabaseUtils.dumpCursorToString(cursor));
+                                List<Movie> movieList = new ArrayList<>();
+
+                                while(cursor.moveToNext()) {
+                                    String id = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_ID));
+                                    String title = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_NAME));
+                                    String posterPath = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_POSTER));
+                                    String backdrop = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_BACKDROP));
+                                    String userRating = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_RATING));
+                                    String releaseDate = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_RELEASE_DATE));
+                                    String overview = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_OVERVIEW));
+                                    Movie data = new Movie(id, title, posterPath, backdrop, userRating, releaseDate, overview);
+                                    movieList.add(data);
+                                }
+
+                                setMoviePosters(movieList);
+
+                                setTitle("Favorites");
                                 return true;
                         }
 
@@ -140,6 +176,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     /* Tell the background method to get popular movies in the background */
     private void loadMovieData(String media, String filter) {
         new FetchMoviesTask(this).execute(media, filter);
+    }
+
+    private Cursor getFavoriteData() {
+
+        return mDb.query(
+                MoviesContract.FavoritesEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                MoviesContract.FavoritesEntry.COLUMN_MOVIE_NAME);
     }
 
     /**

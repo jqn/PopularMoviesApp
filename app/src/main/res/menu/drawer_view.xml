@@ -9,5 +9,9 @@
             android:id="@+id/set_trending"
             android:icon="@drawable/trending_up"
             android:title="@string/top_rated" />
+        <item
+            android:id="@+id/set_favorites"
+            android:icon="@drawable/favorite_button"
+            android:title="@string/favorites" />
     </group>
 </menu>

@@ -72,7 +72,7 @@ public class MainDetailActivity extends AppCompatActivity {
                     if (isChecked) {
                         // Add to favorites table
                         Log.v(TAG, "checked");
-                        addNewFavorite(mMovie.getId(), mMovie.getTitle(), mMovie.getPosterPath());
+                        addNewFavorite(mMovie.getId(), mMovie.getTitle(), mMovie.getPosterPath(), mMovie.getBackdropPath(), mMovie.getUserRating(), mMovie.getReleaseDate(), mMovie.getOverview());
                     } else {
                         // Remove from favorites table
                         Log.v(TAG, "unchecked");
@@ -89,7 +89,7 @@ public class MainDetailActivity extends AppCompatActivity {
      * @param  movieName Movie name
      * @param moviePoster the path to the movie poster
      */
-    private long addNewFavorite(String movieId, String movieName, String moviePoster) {
+    private long addNewFavorite(String movieId, String movieName, String moviePoster, String movieBackdrop, String movieRating, String movieReleaseDate, String movieOverview) {
         // Creates a ContentValues instance to pass the values into the insert query
         ContentValues cv = new ContentValues();
         // Calls put to insert the movie id value with the key COLUMN_MOVIE_ID
@@ -98,9 +98,12 @@ public class MainDetailActivity extends AppCompatActivity {
         cv.put(FavoritesEntry.COLUMN_MOVIE_NAME, movieName);
         // Calls put to insert the movie poster path value with the key COLUMN_MOVIE_POSTER
         cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_POSTER, moviePoster);
+        cv.put(FavoritesEntry.COLUMN_MOVIE_BACKDROP, movieBackdrop);
+        cv.put(FavoritesEntry.COLUMN_MOVIE_RATING, movieRating);
+        cv.put(FavoritesEntry.COLUMN_MOVIE_RELEASE_DATE, movieReleaseDate);
+        cv.put(FavoritesEntry.COLUMN_MOVIE_OVERVIEW, movieOverview);
 
         return mDb.insert(FavoritesEntry.TABLE_NAME, null, cv);
-
 
     }
 }
