@@ -87,22 +87,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                                 setTitle("Top Rated");
                                 return true;
                             case R.id.set_favorites:
-                                mDb = mMovieDbHelper.getReadableDatabase();
-                                Cursor cursor = getFavoriteData();
-                                Log.v(TAG, "movies db" + DatabaseUtils.dumpCursorToString(cursor));
-                                List<Movie> movieList = new ArrayList<>();
-
-                                while(cursor.moveToNext()) {
-                                    String id = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_ID));
-                                    String title = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_NAME));
-                                    String posterPath = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_POSTER));
-                                    String backdrop = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_BACKDROP));
-                                    String userRating = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_RATING));
-                                    String releaseDate = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_RELEASE_DATE));
-                                    String overview = cursor.getString(cursor.getColumnIndex(MoviesContract.FavoritesEntry.COLUMN_MOVIE_OVERVIEW));
-                                    Movie data = new Movie(id, title, posterPath, backdrop, userRating, releaseDate, overview);
-                                    movieList.add(data);
-                                }
+                                MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
+                                List<Movie> movieList = db.getFavorites();
 
                                 setMoviePosters(movieList);
 
@@ -177,19 +163,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void loadMovieData(String media, String filter) {
         new FetchMoviesTask(this).execute(media, filter);
     }
-
-    private Cursor getFavoriteData() {
-
-        return mDb.query(
-                MoviesContract.FavoritesEntry.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                MoviesContract.FavoritesEntry.COLUMN_MOVIE_NAME);
-    }
-
     /**
      * This method is overridden by our MainActivity class in order to handle RecyclerView item
      * clicks.
