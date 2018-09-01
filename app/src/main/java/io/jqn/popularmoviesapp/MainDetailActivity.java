@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -116,7 +117,10 @@ public class MainDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.v(TAG, "reviews clicked");
-                    Toast.makeText(getApplicationContext(), "Button clicked", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Button clicked", Toast.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.details_wrapper), "Hello",
+                            Snackbar.LENGTH_SHORT)
+                            .show();
                 }
             });
         }
