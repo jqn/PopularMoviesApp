@@ -49,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
      */
     private MoviesDbHelper mMovieDbHelper;
 
-    private SQLiteDatabase mDb;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

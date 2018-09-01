@@ -8,9 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
@@ -77,7 +80,7 @@ public class MainDetailActivity extends AppCompatActivity {
                     if (isChecked) {
                         sharedPreferences = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
 
-                        SharedPreferences.Editor  editor = sharedPreferences.edit();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("favorite", true);
                         editor.commit();
 
@@ -94,6 +97,26 @@ public class MainDetailActivity extends AppCompatActivity {
                         Log.v(TAG, "delete favorite");
                         db.removeFavorite(mMovie.getTitle());
                     }
+                }
+            });
+
+            Button reviews = findViewById(R.id.reviews);
+
+            Button trailers = findViewById(R.id.trailers);
+
+            trailers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(TAG, "trailers clicked");
+                    Toast.makeText(getApplicationContext(), "Trailers clicked", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            reviews.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(TAG, "reviews clicked");
+                    Toast.makeText(getApplicationContext(), "Button clicked", Toast.LENGTH_LONG).show();
                 }
             });
         }
