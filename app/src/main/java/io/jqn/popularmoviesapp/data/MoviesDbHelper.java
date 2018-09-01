@@ -1,5 +1,6 @@
 package io.jqn.popularmoviesapp.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -37,11 +38,32 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MoviesContract.FavoritesEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
+    /**
+     * Adds new favorite to the movie database
+     * @param movieId the movie id from the moviedb payload
+     * @param  movieName Movie name
+     * @param moviePoster the path to the movie poster
+     */
+    public void addFavorite(String movieId, String movieName, String moviePoster, String movieBackdrop, String movieRating, String movieReleaseDate, String movieOverview) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Creates a ContentValues instance to pass the values into the insert query
+        ContentValues cv = new ContentValues();
+        // Calls put to insert the movie id value with the key COLUMN_MOVIE_ID
+        cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_ID, movieId);
+        // Calls put to insert the movie name value with the key COLUMN_MOVIE_NAME
+        cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_NAME, movieName);
+        // Calls put to insert the movie poster path value with the key COLUMN_MOVIE_POSTER
+        cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_POSTER, moviePoster);
+        cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_BACKDROP, movieBackdrop);
+        cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_RATING, movieRating);
+        cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_RELEASE_DATE, movieReleaseDate);
+        cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_OVERVIEW, movieOverview);
+
+        db.insert(MoviesContract.FavoritesEntry.TABLE_NAME, null, cv);
+    }
 
     public List<Movie> getFavorites() {
         List<Movie> movieList = new ArrayList<>();
-
-        String selectQuery = "SELECT * FROM " + MoviesContract.FavoritesEntry.TABLE_NAME;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -66,6 +88,8 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
             Movie data = new Movie(id, title, posterPath, backdrop, userRating, releaseDate, overview);
             movieList.add(data);
         }
+        cursor.close();
+        db.close();
 
         return movieList;
 

@@ -29,8 +29,6 @@ public class MainDetailActivity extends AppCompatActivity {
     private TextView mDateReleased;
     private TextView mOverview;
 
-    private SQLiteDatabase mDb;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +41,6 @@ public class MainDetailActivity extends AppCompatActivity {
         mDateReleased = findViewById(R.id.release_date);
         mOverview = findViewById(R.id.overview);
 
-        // Create a DB helper (this will crate the DB if run for the first time)
-        MoviesDbHelper dbHelper = new MoviesDbHelper(this);
-
-        // Keep a reference to the DB until paused or killed
-        mDb = dbHelper.getReadableDatabase();
 
         Intent intentThatStartedThisActivity = getIntent();
 
@@ -72,7 +65,9 @@ public class MainDetailActivity extends AppCompatActivity {
                     if (isChecked) {
                         // Add to favorites table
                         Log.v(TAG, "checked");
-                        addNewFavorite(mMovie.getId(), mMovie.getTitle(), mMovie.getPosterPath(), mMovie.getBackdropPath(), mMovie.getUserRating(), mMovie.getReleaseDate(), mMovie.getOverview());
+                        // Create a DB helper (this will crate the DB if run for the first time)
+                        MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
+                        db.addFavorite(mMovie.getId(), mMovie.getTitle(), mMovie.getPosterPath(), mMovie.getBackdropPath(), mMovie.getUserRating(), mMovie.getReleaseDate(), mMovie.getOverview());
                     } else {
                         // Remove from favorites table
                         Log.v(TAG, "unchecked");
@@ -83,27 +78,4 @@ public class MainDetailActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Adds new favorite to the movie database
-     * @param movieId the movie id from the moviedb payload
-     * @param  movieName Movie name
-     * @param moviePoster the path to the movie poster
-     */
-    private long addNewFavorite(String movieId, String movieName, String moviePoster, String movieBackdrop, String movieRating, String movieReleaseDate, String movieOverview) {
-        // Creates a ContentValues instance to pass the values into the insert query
-        ContentValues cv = new ContentValues();
-        // Calls put to insert the movie id value with the key COLUMN_MOVIE_ID
-        cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_ID, movieId);
-        // Calls put to insert the movie name value with the key COLUMN_MOVIE_NAME
-        cv.put(FavoritesEntry.COLUMN_MOVIE_NAME, movieName);
-        // Calls put to insert the movie poster path value with the key COLUMN_MOVIE_POSTER
-        cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_POSTER, moviePoster);
-        cv.put(FavoritesEntry.COLUMN_MOVIE_BACKDROP, movieBackdrop);
-        cv.put(FavoritesEntry.COLUMN_MOVIE_RATING, movieRating);
-        cv.put(FavoritesEntry.COLUMN_MOVIE_RELEASE_DATE, movieReleaseDate);
-        cv.put(FavoritesEntry.COLUMN_MOVIE_OVERVIEW, movieOverview);
-
-        return mDb.insert(FavoritesEntry.TABLE_NAME, null, cv);
-
-    }
 }
