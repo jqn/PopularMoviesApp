@@ -1,7 +1,9 @@
 package io.jqn.popularmoviesapp;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -59,18 +61,38 @@ public class MainDetailActivity extends AppCompatActivity {
             mOverview.setText(mMovie.getOverview());
 
             ToggleButton toggle = findViewById(R.id.favorite_toggle);
+
+            SharedPreferences preferences = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
+
+            boolean checked = preferences.getBoolean("favorite", false);
+            Log.v(TAG, "favorite" + checked);
+            toggle.setChecked(checked);
+
             toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    /* Create a DB helper (this will crate the DB if run for the first time) */
+                    MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
+                    SharedPreferences sharedPreferences;
                     if (isChecked) {
+                        sharedPreferences = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
+
+                        SharedPreferences.Editor  editor = sharedPreferences.edit();
+                        editor.putBoolean("favorite", true);
+                        editor.commit();
+
                         // Add to favorites table
-                        Log.v(TAG, "checked");
-                        // Create a DB helper (this will crate the DB if run for the first time)
-                        MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
+                        Log.v(TAG, "insert favorite");
                         db.addFavorite(mMovie.getId(), mMovie.getTitle(), mMovie.getPosterPath(), mMovie.getBackdropPath(), mMovie.getUserRating(), mMovie.getReleaseDate(), mMovie.getOverview());
                     } else {
+                        SharedPreferences editor = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor edit = editor.edit();
+                        edit.putBoolean("favorite", false);
+                        edit.apply();
+
                         // Remove from favorites table
-                        Log.v(TAG, "unchecked");
+                        Log.v(TAG, "delete favorite");
+                        db.removeFavorite(mMovie.getTitle());
                     }
                 }
             });

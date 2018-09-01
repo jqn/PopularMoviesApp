@@ -20,6 +20,11 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + MoviesContract.FavoritesEntry.TABLE_NAME + " (" +
+                /**
+                 * FavMovieEntry did not explicitly declare a column called "_ID". However,
+                 * FavMovieEntry implements the interface, "BaseColumns", which does have a field
+                 * named "_ID". We use that here to designate our table's primary key.
+                 */
                 MoviesContract.FavoritesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 MoviesContract.FavoritesEntry.COLUMN_MOVIE_NAME + " TEXT NOT NULL, " +
                 MoviesContract.FavoritesEntry.COLUMN_MOVIE_POSTER + " TEXT NOT NULL, " +
@@ -27,10 +32,21 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
                 MoviesContract.FavoritesEntry.COLUMN_MOVIE_BACKDROP + " TEXT NOT NULL, " +
                 MoviesContract.FavoritesEntry.COLUMN_MOVIE_RATING + " TEXT NOT NULL, " +
                 MoviesContract.FavoritesEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL, " +
-                MoviesContract.FavoritesEntry.COLUMN_MOVIE_OVERVIEW + " TEXT NOT NULL" +
-                "); ";
+                MoviesContract.FavoritesEntry.COLUMN_MOVIE_OVERVIEW + " TEXT NOT NULL, " +
+                /**
+                 * To ensure this table can only contain one movie entry per movie, declaring
+                 * the movie_id column to bu unique. Also specify "ON CONFLICT REPLACE". This
+                 * tells SQLite that if having a movie entry for a certain movie_id and
+                 * attempting to insert another movie entry with that movie_id, replacing
+                 * the old movie entry.
+                 */
+                " UNIQUE (" + MoviesContract.FavoritesEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
 
 
+        /**
+         * After spelling out the SQLite table creation statement above, actually execute
+         * that SQL with the execSQL method of the SQLite database object.
+         */
         sqLiteDatabase.execSQL(SQL_CREATE_FAVORITES_TABLE);
     }
 
@@ -60,6 +76,14 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
         cv.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_OVERVIEW, movieOverview);
 
         db.insert(MoviesContract.FavoritesEntry.TABLE_NAME, null, cv);
+    }
+
+    public void removeFavorite(String movieName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = MoviesContract.FavoritesEntry.COLUMN_MOVIE_NAME + " LIKE ?";
+        String[] selectionArgs = {movieName};
+        db.delete(MoviesContract.FavoritesEntry.TABLE_NAME, selection, selectionArgs);
+
     }
 
     public List<Movie> getFavorites() {
