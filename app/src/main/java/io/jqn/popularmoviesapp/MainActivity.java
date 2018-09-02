@@ -1,12 +1,16 @@
 package io.jqn.popularmoviesapp;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -133,8 +137,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
          */
         mLoadingIndicator = findViewById(R.id.grid_loading_indicator);
 
-        /* Once all of our views are setup, we can load the movie data. */
-        loadMovieData("movie", "popular");
+        if (getNetworkInfo() != null && getNetworkInfo().isConnected()) {
+            /* Once all of our views are setup, we can load the movie data. */
+            loadMovieData("movie", "popular");
+        } else {
+            Snackbar.make(findViewById(R.id.drawer_layout), "Please check your network connection", Snackbar.LENGTH_LONG).show();
+        }
+
     }
 
     @Override
@@ -161,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void loadMovieData(String media, String filter) {
         new FetchMoviesTask(this).execute(media, filter);
     }
+
     /**
      * This method is overridden by our MainActivity class in order to handle RecyclerView item
      * clicks.
@@ -208,6 +218,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         /* First hide currently visible data */
         mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
+
+    private NetworkInfo getNetworkInfo() {
+        // Get a reference to the connectivity manager
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connManager.getActiveNetworkInfo();
     }
 
 }

@@ -68,7 +68,7 @@ public class MainDetailActivity extends AppCompatActivity {
 
             SharedPreferences preferences = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
 
-            boolean checked = preferences.getBoolean("favorite", false);
+            boolean checked = preferences.getBoolean(mMovie.getId(), false);
             Log.v(TAG, "favorite" + checked);
             toggle.setChecked(checked);
 
@@ -82,7 +82,7 @@ public class MainDetailActivity extends AppCompatActivity {
                         sharedPreferences = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("favorite", true);
+                        editor.putBoolean(mMovie.getId(), true);
                         editor.commit();
 
                         // Add to favorites table
@@ -91,7 +91,7 @@ public class MainDetailActivity extends AppCompatActivity {
                     } else {
                         SharedPreferences editor = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
                         SharedPreferences.Editor edit = editor.edit();
-                        edit.putBoolean("favorite", false);
+                        edit.putBoolean(mMovie.getId(), false);
                         edit.apply();
 
                         // Remove from favorites table
