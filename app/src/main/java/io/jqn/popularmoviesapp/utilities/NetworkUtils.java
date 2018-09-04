@@ -1,8 +1,6 @@
 package io.jqn.popularmoviesapp.utilities;
 
 import android.net.Uri;
-import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -14,9 +12,8 @@ import javax.net.ssl.HttpsURLConnection;
 import io.jqn.popularmoviesapp.BuildConfig;
 
 /**
- * Created by jqn on 6/16/18.
+ * This utility will be used to communicate with the MovieDB API
  */
-
 public class NetworkUtils {
 
     final static String QUERY_PARAM = "api_key";
@@ -49,6 +46,24 @@ public class NetworkUtils {
             e.printStackTrace();
         }
 
+        return url;
+    }
+
+    public static URL buildFeatureURL(String featureType, String id, String filter ) {
+        Uri builtUri = Uri.parse(STATIC_MOVIE_DB_URL).buildUpon()
+        .appendPath(API_VERSION)
+        .appendPath(featureType)
+        .appendPath(id)
+        .appendPath(filter)
+        .appendQueryParameter(QUERY_PARAM, KEY)
+        .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         return url;
     }
 

@@ -10,7 +10,7 @@ import io.jqn.popularmoviesapp.models.Movie;
 
 // Extend AsyncTask and perform network requests
 public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
-    private static final String TAG = "FetchMoviesTask";
+    private static final String TAG = FetchMoviesTask.class.getSimpleName();
 
     MainActivity mainActivity;
 
@@ -31,9 +31,9 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             return null;
         }
 
-        String endpoint = params[0];
+        String mediatType = params[0];
         String contentType = params[1];
-        URL moviesRequestUrl = NetworkUtils.buildURL(endpoint, contentType);
+        URL moviesRequestUrl = NetworkUtils.buildURL(mediatType, contentType);
 
         try {
             String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);

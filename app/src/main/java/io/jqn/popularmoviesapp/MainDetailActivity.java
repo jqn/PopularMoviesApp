@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import io.jqn.popularmoviesapp.data.MoviesContract;
 import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
+import io.jqn.popularmoviesapp.utilities.FetchMovieFeaturesTask;
 
 import static io.jqn.popularmoviesapp.data.MoviesContract.*;
 
@@ -109,7 +110,7 @@ public class MainDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.v(TAG, "trailers clicked");
-                    Toast.makeText(getApplicationContext(), "Trailers clicked", Toast.LENGTH_LONG).show();
+                    loadTrailers("movie", mMovie.getId(), "videos");
                 }
             });
 
@@ -117,14 +118,19 @@ public class MainDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.v(TAG, "reviews clicked");
-                    //Toast.makeText(getApplicationContext(), "Button clicked", Toast.LENGTH_LONG).show();
-                    Snackbar.make(findViewById(R.id.details_wrapper), "Hello",
-                            Snackbar.LENGTH_SHORT)
-                            .show();
+                    loadReviews("movie", mMovie.getId(), "reviews");
                 }
             });
         }
 
+    }
+
+    public void loadReviews(String feature, String id, String filter) {
+        new FetchMovieFeaturesTask(this).execute(feature, id, filter);
+    }
+
+    public void loadTrailers(String feature, String id, String filter) {
+        new FetchMovieFeaturesTask(this).execute(feature, id, filter);
     }
 
 }

@@ -80,6 +80,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Trailers"
+            android:theme="@style/primaryFlatButton"
             app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
             app:layout_constraintTop_toBottomOf="@+id/favorite_toggle" />
 
@@ -89,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:theme="@style/primaryFlatButton"
             android:text="Reviews"
             app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
             app:layout_constraintTop_toBottomOf="@+id/trailers" />
