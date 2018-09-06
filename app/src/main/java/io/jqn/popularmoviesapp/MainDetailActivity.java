@@ -1,10 +1,9 @@
 package io.jqn.popularmoviesapp;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,17 +13,16 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
-import io.jqn.popularmoviesapp.data.MoviesContract;
+import java.util.List;
+
 import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
-import io.jqn.popularmoviesapp.utilities.FetchMovieFeaturesTask;
-
-import static io.jqn.popularmoviesapp.data.MoviesContract.*;
+import io.jqn.popularmoviesapp.models.Review;
+import io.jqn.popularmoviesapp.tasks.FetchMovieFeaturesTask;
 
 public class MainDetailActivity extends AppCompatActivity {
     public static final String TAG = MainDetailActivity.class.getSimpleName();
@@ -35,6 +33,10 @@ public class MainDetailActivity extends AppCompatActivity {
     private TextView mRating;
     private TextView mDateReleased;
     private TextView mOverview;
+
+    private List<Review> mMoviewReviews;
+
+    private BottomSheetBehavior mBottomSheetBehavior;
 
 
     @Override
@@ -125,12 +127,28 @@ public class MainDetailActivity extends AppCompatActivity {
 
     }
 
+    public void setMoviewReviews(List<Review> mMoviewReviews) {
+        this.mMoviewReviews = mMoviewReviews;
+    }
+
     public void loadReviews(String feature, String id, String filter) {
         new FetchMovieFeaturesTask(this).execute(feature, id, filter);
     }
 
     public void loadTrailers(String feature, String id, String filter) {
         new FetchMovieFeaturesTask(this).execute(feature, id, filter);
+    }
+
+    public void showSnackBar(String message, int duration) {
+        View view = findViewById(R.id.details_wrapper);
+        Snackbar.make(view, message, duration).show();
+    }
+
+    public void showBottomSheet() {
+        View bottomSheet = findViewById(R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
     }
 
 }

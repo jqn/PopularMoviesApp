@@ -54,7 +54,6 @@ public class Movie implements Serializable {
         return mReleaseDate;
     }
 
-
     public String getOverview() {
         return mOverview;
     }

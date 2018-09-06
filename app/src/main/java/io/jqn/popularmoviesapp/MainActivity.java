@@ -20,7 +20,7 @@ import java.util.List;
 import io.jqn.popularmoviesapp.adapter.MovieAdapter;
 import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
-import io.jqn.popularmoviesapp.utilities.FetchMoviesTask;
+import io.jqn.popularmoviesapp.tasks.FetchMoviesTask;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
     private static final String TAG = MainActivity.class.getSimpleName();

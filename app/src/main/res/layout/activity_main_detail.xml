@@ -1,115 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/details_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <ImageView
-            android:id="@+id/movie_backdrop"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="H,16:9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/backdrop_placeholder" />
-
-        <ImageView
-            android:id="@+id/movie_poster_thumbnail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintDimensionRatio="H,16:9"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/movie_backdrop"
-            tools:src="@drawable/poster_placeholder" />
-
-        <TextView
-            android:id="@+id/release_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textAlignment="viewStart"
-            android:textSize="@dimen/material_text_title"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
-            app:layout_constraintTop_toBottomOf="@+id/movie_backdrop"
-            tools:text="2017-08-17" />
-
-        <TextView
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textSize="@dimen/material_text_subhead"
-            app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
-            app:layout_constraintTop_toBottomOf="@+id/release_date"
-            tools:text="7/10" />
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/details_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
-        <ToggleButton
-            android:id="@+id/favorite_toggle"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/favorite_button"
-            android:checked="false"
-            android:text=""
-            android:textOff=""
-            android:textOn=""
-            app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
-            app:layout_constraintTop_toBottomOf="@+id/rating" />
+            <ImageView
+                android:id="@+id/movie_backdrop"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="H,16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/backdrop_placeholder" />
 
-        <Button
-            android:id="@+id/trailers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Trailers"
-            android:theme="@style/primaryFlatButton"
-            app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
-            app:layout_constraintTop_toBottomOf="@+id/favorite_toggle" />
+            <ImageView
+                android:id="@+id/movie_poster_thumbnail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintDimensionRatio="H,16:9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/movie_backdrop"
+                tools:src="@drawable/poster_placeholder" />
 
-        <Button
-            android:id="@+id/reviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:theme="@style/primaryFlatButton"
-            android:text="Reviews"
-            app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
-            app:layout_constraintTop_toBottomOf="@+id/trailers" />
+            <TextView
+                android:id="@+id/release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textAlignment="viewStart"
+                android:textSize="@dimen/material_text_title"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
+                app:layout_constraintTop_toBottomOf="@+id/movie_backdrop"
+                tools:text="2017-08-17" />
 
-        <TextView
-            android:id="@+id/overview"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginHorizontal="@dimen/horizontal_padding"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textAlignment="viewStart"
-            android:textSize="@dimen/material_text_body1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/movie_poster_thumbnail"
-            tools:text="Steamed robust, arabica, café au lait seasonal mazagran cortado froth filter. Aromatic crema café au lait filter cup white, latte espresso foam flavour robust." />
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textSize="@dimen/material_text_subhead"
+                app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
+                app:layout_constraintTop_toBottomOf="@+id/release_date"
+                tools:text="7/10" />
 
 
-    </android.support.constraint.ConstraintLayout>
-</ScrollView>
+            <ToggleButton
+                android:id="@+id/favorite_toggle"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/favorite_button"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn=""
+                app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
+                app:layout_constraintTop_toBottomOf="@+id/rating" />
+
+            <Button
+                android:id="@+id/trailers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Trailers"
+                android:textColor="@color/white"
+                android:theme="@style/primaryFlatButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
+                app:layout_constraintTop_toBottomOf="@+id/favorite_toggle" />
+
+            <Button
+                android:id="@+id/reviews"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Reviews"
+                android:textColor="@color/white"
+                android:theme="@style/primaryFlatButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/movie_poster_thumbnail"
+                app:layout_constraintTop_toBottomOf="@+id/trailers" />
+
+            <TextView
+                android:id="@+id/overview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginHorizontal="@dimen/horizontal_padding"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textAlignment="viewStart"
+                android:textSize="@dimen/material_text_body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_poster_thumbnail"
+                tools:text="Steamed robust, arabica, café au lait seasonal mazagran cortado froth filter. Aromatic crema café au lait filter cup white, latte espresso foam flavour robust." />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+    <!-- Include bottom sheet -->
+    <include layout="@layout/bottom_sheet"/>
+</android.support.design.widget.CoordinatorLayout>

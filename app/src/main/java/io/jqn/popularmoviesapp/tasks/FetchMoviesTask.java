@@ -1,4 +1,4 @@
-package io.jqn.popularmoviesapp.utilities;
+package io.jqn.popularmoviesapp.tasks;
 
 import android.os.AsyncTask;
 import java.net.URL;
@@ -7,6 +7,8 @@ import java.util.List;
 
 import io.jqn.popularmoviesapp.MainActivity;
 import io.jqn.popularmoviesapp.models.Movie;
+import io.jqn.popularmoviesapp.utilities.MoviesJsonUtils;
+import io.jqn.popularmoviesapp.utilities.NetworkUtils;
 
 // Extend AsyncTask and perform network requests
 public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
