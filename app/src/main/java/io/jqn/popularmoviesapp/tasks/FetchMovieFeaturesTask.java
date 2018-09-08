@@ -65,8 +65,10 @@ public class FetchMovieFeaturesTask extends AsyncTask<String, Void, List<Review>
     protected void onPostExecute(List<Review> reviewData) {
         Log.v(TAG, "review data task" + reviewData);
         if (reviewData != null) {
-            Log.v(TAG, "we have movies");
+            Log.v(TAG, "we have reviews");
             this.mainDetailActivity.setMovieReviews(reviewData);
+        } else {
+            this.mainDetailActivity.showSnackBar("No review content available");
         }
     }
 

@@ -9,6 +9,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -124,8 +125,6 @@ public class MainDetailActivity extends AppCompatActivity {
             mAdapter = new ReviewAdapter();
             mRecyclerView.setAdapter(mAdapter);
 
-            loadReviews("movie", mMovie.getId(), "videos");
-
             Button reviews = findViewById(R.id.reviews);
 
             Button trailers = findViewById(R.id.trailers);
@@ -162,14 +161,20 @@ public class MainDetailActivity extends AppCompatActivity {
 
     public void setMovieReviews(List<Review> movieReviews) {
         Log.v(TAG, "movie reviews" + movieReviews);
-        mReviewAdapter = new ReviewAdapter();
-        mRecyclerView.setAdapter(mReviewAdapter);
-        mReviewAdapter.setReviewData(movieReviews);
+        if (movieReviews.isEmpty()) {
+            showSnackBar("No review content available");
+        } else {
+            mReviewAdapter = new ReviewAdapter();
+            mRecyclerView.setAdapter(mReviewAdapter);
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+            mReviewAdapter.setReviewData(movieReviews);
+            showSnackBar("Scroll down to view movie reviews");
+        }
     }
 
-    public void showSnackBar(String message, int duration) {
+    public void showSnackBar(String message) {
         View view = findViewById(R.id.details_wrapper);
-        Snackbar.make(view, message, duration).show();
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
     public void showBottomSheet() {
