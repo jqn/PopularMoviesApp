@@ -7,7 +7,7 @@
         android:id="@+id/trailer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="author"
+        android:text="name"
         android:textColor="@color/black"
         android:paddingTop="@dimen/vertical_padding"
         android:textSize="@dimen/material_text_title"/>
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:paddingVertical="@dimen/vertical_padding"
-        android:text="author"
+        android:text="site"
         android:textSize="@dimen/material_text_body2"/>
 
 </LinearLayout>

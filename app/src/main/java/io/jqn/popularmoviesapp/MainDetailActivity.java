@@ -27,10 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.jqn.popularmoviesapp.adapter.ReviewAdapter;
+import io.jqn.popularmoviesapp.adapter.TrailerAdapter;
 import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
 import io.jqn.popularmoviesapp.models.Review;
+import io.jqn.popularmoviesapp.models.Trailer;
 import io.jqn.popularmoviesapp.tasks.FetchMovieFeaturesTask;
+import io.jqn.popularmoviesapp.tasks.FetchTrailersTask;
 
 public class MainDetailActivity extends AppCompatActivity {
     public static final String TAG = MainDetailActivity.class.getSimpleName();
@@ -47,12 +50,14 @@ public class MainDetailActivity extends AppCompatActivity {
     private BottomSheetBehavior mBottomSheetBehavior;
 
     private RecyclerView mRecyclerView;
+    private RecyclerView mTrailerRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutmanager;
 
     private ReviewAdapter mReviewAdapter;
-
-    ArrayList<Review> testReviews;
+    private TrailerAdapter mTrailerAdapter = new TrailerAdapter();
+    private RecyclerView.Adapter mTAdapter;
+    private RecyclerView.LayoutManager mLayoutmanagerTrailers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,10 +125,19 @@ public class MainDetailActivity extends AppCompatActivity {
             });
 
             mRecyclerView = findViewById(R.id.movie_reviews);
+            mTrailerRecyclerView = findViewById(R.id.movie_trailers);
+
             mLayoutmanager = new LinearLayoutManager(this);
+            mLayoutmanagerTrailers = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(mLayoutmanager);
+            mTrailerRecyclerView.setLayoutManager(mLayoutmanagerTrailers);
+
             mAdapter = new ReviewAdapter();
-            mRecyclerView.setAdapter(mAdapter);
+            mTAdapter = new TrailerAdapter();
+g
+            mRecyclerView.setAdapter(mTAdapter);
+            mTrailerRecyclerView.setAdapter(mTrailerAdapter);
+
 
             Button reviews = findViewById(R.id.reviews);
 
@@ -156,7 +170,7 @@ public class MainDetailActivity extends AppCompatActivity {
     }
 
     public void loadTrailers(String feature, String id, String filter) {
-        new FetchMovieFeaturesTask(this).execute(feature, id, filter);
+        new FetchTrailersTask(this).execute(feature, id, filter);
     }
 
     public void setMovieReviews(List<Review> movieReviews) {
@@ -170,6 +184,19 @@ public class MainDetailActivity extends AppCompatActivity {
             mReviewAdapter.setReviewData(movieReviews);
             showSnackBar("Scroll down to view movie reviews");
         }
+    }
+
+    public void setMovieTrailers(List<Trailer> movieTrailers) {
+        if (movieTrailers.isEmpty()) {
+            showSnackBar("No review content available");
+        } else {
+            mTrailerAdapter = new TrailerAdapter();
+            mTrailerRecyclerView.setAdapter(mTrailerAdapter);
+            mTrailerRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+            mTrailerAdapter.setTrailerData(movieTrailers);
+            showSnackBar("Scroll down to view movie trailers");
+        }
+
     }
 
     public void showSnackBar(String message) {

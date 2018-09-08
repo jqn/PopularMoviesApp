@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.jqn.popularmoviesapp.models.Review;
+import io.jqn.popularmoviesapp.models.Trailer;
 
 public class FeaturesJsonUtils {
     private static final String TAG = FeaturesJsonUtils.class.getSimpleName();
@@ -57,7 +58,7 @@ public class FeaturesJsonUtils {
             /* Get the review url */
             String url = reviewJson.getString(REVIEW_URL);
 
-            Log.v(TAG, "reviewjson ****" + author);
+            Log.v(TAG, "review json ****" + id);
 
             /**
              * Create a new review object with selected properties.
@@ -69,6 +70,54 @@ public class FeaturesJsonUtils {
 
         return reviews;
 
+    }
+
+    public static List<Trailer> getTrailerStringsFromJson(String trailersJsonStr) throws JSONException  {
+        final String TRAILER_LIST = "results";
+        final String ID = "id";
+        final String KEY = "key";
+        final String NAME = "name";
+        final String SITE = "site";
+
+        // Create an empty ArrayList to add movies to.
+        List<Trailer> trailers = new ArrayList<>();
+
+        // Create a JSONObject from the JSON response string
+        JSONObject trailersJson = new JSONObject(trailersJsonStr);
+
+        Log.v(TAG, "get json strings");
+
+        // Extract the JSONArray associated with the key called "results",
+        JSONArray movieArray = trailersJson.getJSONArray(TRAILER_LIST);
+
+        for (int i = 0; i < movieArray.length(); i++) {
+
+            /* Get the JSON object representing a movie */
+            JSONObject movieJson = movieArray.getJSONObject(i);
+
+            /* Get the movie id */
+            String id = movieJson.getString(ID);
+
+            /* Get the movie title */
+            String key = movieJson.getString(KEY);
+
+            /* Get the movie poster */
+            String name = movieJson.getString(NAME);
+
+            /* Get the movie backdrop */
+            String site = movieJson.getString(SITE);
+            /**
+             * Create a new Movie object with selected properties.
+             */
+            Trailer trailer = new Trailer(id, key, name, site);
+
+            trailers.add(trailer);
+        }
+
+        Log.v(TAG, "trailers json ****" + trailers);
+
+
+        return trailers;
     }
 
 }

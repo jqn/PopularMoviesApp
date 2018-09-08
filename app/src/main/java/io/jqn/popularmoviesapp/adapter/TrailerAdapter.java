@@ -1,7 +1,7 @@
 package io.jqn.popularmoviesapp.adapter;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,24 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.jqn.popularmoviesapp.R;
-import io.jqn.popularmoviesapp.models.Review;
+import io.jqn.popularmoviesapp.models.Trailer;
 
-/**
- * Create the basic adapter extending from RecylcerView.Adapter
- * This populates data into the RecyclerView
- */
-public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdapterViewHolder> {
+public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerAdapterViewHolder> {
 
-    private static final String TAG = ReviewAdapter.class.getSimpleName();
-    // Member variable for reviews
-    private List<Review> mReviews;
+    private static final String TAG = TrailerAdapter.class.getSimpleName();
+    // Member variable for trailers
+    private List<Trailer> mTrailers;
 
 
-    public ReviewAdapter() {
+    public TrailerAdapter() {
 
     }
 
@@ -40,16 +35,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
      * @return A new ReviewAdapterViewHolder that holds the View for each list item
      */
     @Override
-    public ReviewAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public TrailerAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        int layoutIdForListItem = R.layout.movie_review_item;
+        int layoutIdForListItem = R.layout.movie_trailer_item;
         boolean shouldAttachToParentImmediately = false;
 
         // Inflate the custom layout
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
-        return new ReviewAdapterViewHolder(view);
+        return new TrailerAdapterViewHolder(view);
     }
 
     /**
@@ -58,18 +53,18 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
      * authors and contents for each particular position, using the "position" argument that
      * is conveniently passed in.
      *
-     * @param reviewAdapterViewHolder The ViewHolder which should be updated to represent the
+     * @param TrailerAdapterViewHolder The ViewHolder which should be updated to represent the
      *                                contents of the item at the given position in the data set.
      * @param position                The position of the item within the adapter's data set.
-    // */
+     */
     @Override
-    public void onBindViewHolder(ReviewAdapterViewHolder reviewAdapterViewHolder, int position) {
+    public void onBindViewHolder(TrailerAdapterViewHolder trailerAdapterViewHolder, int position) {
         // Get the data model based on position
-        Review review = mReviews.get(position);
+        Trailer trailer = mTrailers.get(position);
 
         // Set item views based on the views and data model
-        reviewAdapterViewHolder.mReviewAuthor.setText(review.getReviewAuthor());
-        reviewAdapterViewHolder.mReviewContent.setText(review.getReviewContent());
+        trailerAdapterViewHolder.mTrailerKey.setText(trailer.getTrailerKey());
+        trailerAdapterViewHolder.mTrailerName.setText(trailer.getTrailerName());
     }
 
     /**
@@ -79,12 +74,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
      */
     @Override
     public int getItemCount() {
-        if (mReviews == null) {
-            Log.v(TAG, "reviews are null " );
+        if (mTrailers == null) {
+            Log.v(TAG, "trailers are null " );
             return 0;
         } else {
-            Log.v(TAG, "reviews are not null " +  mReviews.size() );
-            return mReviews.size();
+            Log.v(TAG, "trailers are not null " +  mTrailers.size() );
+            return mTrailers.size();
         }
     }
 
@@ -92,23 +87,23 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
      * Provide a direct reference to each of the views within a data item
      * and cache the views within the item layout for fast access
      */
-    public class ReviewAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class TrailerAdapterViewHolder extends RecyclerView.ViewHolder {
         /**
          * Set members variables for the view to be set as the render row
          */
-        public final TextView mReviewAuthor;
-        public final TextView mReviewContent;
+        public final TextView mTrailerKey;
+        public final TextView mTrailerName;
 
-        public ReviewAdapterViewHolder(View view) {
+        public TrailerAdapterViewHolder(View view) {
             super(view);
-            mReviewAuthor =  view.findViewById(R.id.review_author);
-            mReviewContent =  view.findViewById(R.id.review_content);
+            mTrailerKey =  view.findViewById(R.id.trailer_name);
+            mTrailerName =  view.findViewById(R.id.trailer_site);
         }
     }
 
-    public void setReviewData(List<Review> reviewData) {
-        Log.v(TAG, "review data adapter *******" + reviewData);
-        mReviews = reviewData;
+    public void setTrailerData(List<Trailer> trailerData) {
+        Log.v(TAG, "trailer data adapter *******" + trailerData);
+        mTrailers = trailerData;
         notifyDataSetChanged();
     }
 }
