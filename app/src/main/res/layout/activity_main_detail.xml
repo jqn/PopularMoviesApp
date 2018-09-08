@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -123,10 +124,19 @@
                 app:layout_constraintTop_toBottomOf="@id/movie_poster_thumbnail"
                 tools:text="Steamed robust, arabica, café au lait seasonal mazagran cortado froth filter. Aromatic crema café au lait filter cup white, latte espresso foam flavour robust." />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/movie_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overview" />
+
 
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
-    <!-- Include bottom sheet -->
-    <include layout="@layout/bottom_sheet"/>
 </android.support.design.widget.CoordinatorLayout>

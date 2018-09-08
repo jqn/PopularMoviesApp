@@ -7,11 +7,14 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -19,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import io.jqn.popularmoviesapp.adapter.ReviewAdapter;
 import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
 import io.jqn.popularmoviesapp.models.Review;
@@ -38,6 +42,9 @@ public class MainDetailActivity extends AppCompatActivity {
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
+    private RecyclerView mRecyclerView;
+
+    private ReviewAdapter mReviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +111,17 @@ public class MainDetailActivity extends AppCompatActivity {
                 }
             });
 
+            // RecyclerView
+            mRecyclerView = findViewById(R.id.movie_reviews);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            mRecyclerView.setLayoutManager(layoutManager);
+
+            mRecyclerView.setHasFixedSize(true);
+            mReviewAdapter = new ReviewAdapter();
+            mRecyclerView.setAdapter(mReviewAdapter);
+
+            //loadReviews("movie", mMovie.getId(), "reviews");
+
             Button reviews = findViewById(R.id.reviews);
 
             Button trailers = findViewById(R.id.trailers);
@@ -127,8 +145,12 @@ public class MainDetailActivity extends AppCompatActivity {
 
     }
 
-    public void setMoviewReviews(List<Review> mMoviewReviews) {
-        this.mMoviewReviews = mMoviewReviews;
+    public ReviewAdapter getmReviewAdapter() {
+        return mReviewAdapter;
+    }
+
+    public void showMovieReviews() {
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     public void loadReviews(String feature, String id, String filter) {
@@ -145,9 +167,9 @@ public class MainDetailActivity extends AppCompatActivity {
     }
 
     public void showBottomSheet() {
-        View bottomSheet = findViewById(R.id.bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        //View bottomSheet = findViewById(R.id.bottom_sheet);
+        //mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        //mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
     }
 

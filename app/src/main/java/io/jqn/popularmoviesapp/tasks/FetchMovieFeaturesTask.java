@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.jqn.popularmoviesapp.MainDetailActivity;
+import io.jqn.popularmoviesapp.adapter.ReviewAdapter;
 import io.jqn.popularmoviesapp.models.Review;
 import io.jqn.popularmoviesapp.utilities.FeaturesJsonUtils;
 import io.jqn.popularmoviesapp.utilities.NetworkUtils;
@@ -17,6 +18,8 @@ public class FetchMovieFeaturesTask extends AsyncTask<String, Void, List<Review>
     private static final String TAG = FetchMovieFeaturesTask.class.getSimpleName();
 
     MainDetailActivity mainDetailActivity;
+
+    private ReviewAdapter mReviewAdapter;
 
     public FetchMovieFeaturesTask(MainDetailActivity mainDetailActivity) {
         this.mainDetailActivity = mainDetailActivity;
@@ -44,9 +47,9 @@ public class FetchMovieFeaturesTask extends AsyncTask<String, Void, List<Review>
         try {
             String jsonReviewResponse = NetworkUtils.getResponseFromHttpUrl(reviewRequestUrl);
 
-            Log.v(TAG, "reviews response" + jsonReviewResponse);
-
             List<Review> reviewJsonData = FeaturesJsonUtils.getFeaturesStringsFromJson(jsonReviewResponse);
+
+            Log.v(TAG, "reviews List" + reviewJsonData);
 
             return reviewJsonData;
 
@@ -59,14 +62,17 @@ public class FetchMovieFeaturesTask extends AsyncTask<String, Void, List<Review>
 
     @Override
     protected void onPostExecute(List<Review> reviewData) {
-        Log.v(TAG, "reviewdata " + reviewData);
-        if (reviewData.isEmpty()) {
+        Log.v(TAG, "review data task" + reviewData.size());
+        if (reviewData != null) {
+            mReviewAdapter = new ReviewAdapter();
+            Log.v(TAG, "we have movies");
+            this.mainDetailActivity.showMovieReviews();
+            mReviewAdapter.setReviewData(reviewData);
+            //String numberOfReviewString = Integer.toString(this.mainDetailActivity.getmReviewAdapter().getItemCount());
+
+        } else {
             int duration = Snackbar.LENGTH_LONG;
             this.mainDetailActivity.showSnackBar("No content available", duration);
-        } else {
-            Log.v(TAG, "we have movies");
-            this.mainDetailActivity.setMoviewReviews(reviewData);
-            this.mainDetailActivity.showBottomSheet();
         }
     }
 

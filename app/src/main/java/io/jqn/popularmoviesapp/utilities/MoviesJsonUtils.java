@@ -1,5 +1,7 @@
 package io.jqn.popularmoviesapp.utilities;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,6 +79,8 @@ public final class MoviesJsonUtils {
 
             movies.add(movie);
         }
+
+        Log.v(TAG, "moviesjson" + movies);
 
         return movies;
 

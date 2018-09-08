@@ -56,6 +56,9 @@ public class FeaturesJsonUtils {
 
             /* Get the review url */
             String url = reviewJson.getString(REVIEW_URL);
+
+            Log.v(TAG, "reviewjson ****" + url);
+
             /**
              * Create a new review object with selected properties.
              */
