@@ -22,9 +22,9 @@ public class Review implements Serializable {
         mUrl = url;
     }
     // Gets the review ID
-    public String getReviewId() {
-        return mId;
-    }
+    //public String getReviewId() {
+    //    return mId;
+    //}
     // Gets the author name
     public String getReviewAuthor() {
         return mAuthor;
@@ -37,5 +37,17 @@ public class Review implements Serializable {
     public String getReviewUrl() {
         return  mUrl;
     }
+
+    private static int lastContactId = 0;
+
+    //public static ArrayList<Review> createReviewList(int numContacts) {
+    //    ArrayList<Review> reviews = new ArrayList<Review>();
+    //
+    //    for (int i = 1; i <= numContacts; i++) {
+    //        reviews.add(new Review("foo", "bar", "blah blah", "https" ));
+    //    }
+    //
+    //    return reviews;
+    //}
 
 }

@@ -35,6 +35,7 @@ public class FetchMovieFeaturesTask extends AsyncTask<String, Void, List<Review>
     protected List<Review> doInBackground(String... params) {
         /* If there is no endpoint there is nothing to look up */
         if (params.length == 0) {
+            Log.v(TAG, "params are null");
             return null;
         }
 
@@ -62,17 +63,10 @@ public class FetchMovieFeaturesTask extends AsyncTask<String, Void, List<Review>
 
     @Override
     protected void onPostExecute(List<Review> reviewData) {
-        Log.v(TAG, "review data task" + reviewData.size());
+        Log.v(TAG, "review data task" + reviewData);
         if (reviewData != null) {
-            mReviewAdapter = new ReviewAdapter();
             Log.v(TAG, "we have movies");
-            this.mainDetailActivity.showMovieReviews();
-            mReviewAdapter.setReviewData(reviewData);
-            //String numberOfReviewString = Integer.toString(this.mainDetailActivity.getmReviewAdapter().getItemCount());
-
-        } else {
-            int duration = Snackbar.LENGTH_LONG;
-            this.mainDetailActivity.showSnackBar("No content available", duration);
+            this.mainDetailActivity.setMovieReviews(reviewData);
         }
     }
 

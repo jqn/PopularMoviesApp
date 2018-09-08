@@ -21,15 +21,15 @@ import io.jqn.popularmoviesapp.models.Review;
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdapterViewHolder> {
 
     private static final String TAG = ReviewAdapter.class.getSimpleName();
-
+    // Member variable for reviews
     private List<Review> mReviews;
 
-    private String[] mAuthorStrings;
-
-    private String[] mContentStrings;
+    //private String[] mAuthorStrings;
+    //
+    //private String[] mContentStrings;
 
     public ReviewAdapter() {
-        this.mReviews = new ArrayList<>();
+
     }
 
     /**
@@ -44,10 +44,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
     @Override
     public ReviewAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.movie_review_item;
         LayoutInflater inflater = LayoutInflater.from(context);
+
+        int layoutIdForListItem = R.layout.movie_review_item;
         boolean shouldAttachToParentImmediately = false;
 
+        // Inflate the custom layout
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
         return new ReviewAdapterViewHolder(view);
     }
@@ -61,10 +63,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
      * @param reviewAdapterViewHolder The ViewHolder which should be updated to represent the
      *                                contents of the item at the given position in the data set.
      * @param position                The position of the item within the adapter's data set.
-     */
+    // */
     @Override
     public void onBindViewHolder(ReviewAdapterViewHolder reviewAdapterViewHolder, int position) {
+        // Get the data model based on position
         Review review = mReviews.get(position);
+
+        // Set item views based on the views and data model
         reviewAdapterViewHolder.mReviewAuthor.setText(review.getReviewAuthor());
         reviewAdapterViewHolder.mReviewContent.setText(review.getReviewContent());
     }
@@ -83,7 +88,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
             Log.v(TAG, "reviews are not null " +  mReviews.size() );
             return mReviews.size();
         }
-
     }
 
     /**
@@ -106,7 +110,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
 
     public void setReviewData(List<Review> reviewData) {
         Log.v(TAG, "review data adapter *******" + reviewData);
-        this.mReviews = reviewData;
+        mReviews = reviewData;
         notifyDataSetChanged();
     }
 }

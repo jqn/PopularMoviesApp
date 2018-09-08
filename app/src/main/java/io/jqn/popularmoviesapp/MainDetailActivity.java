@@ -3,6 +3,8 @@ package io.jqn.popularmoviesapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.jqn.popularmoviesapp.adapter.ReviewAdapter;
@@ -38,17 +41,22 @@ public class MainDetailActivity extends AppCompatActivity {
     private TextView mDateReleased;
     private TextView mOverview;
 
-    private List<Review> mMoviewReviews;
+    private List<Review> mMovieReviews;
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
     private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutmanager;
 
     private ReviewAdapter mReviewAdapter;
+
+    ArrayList<Review> testReviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main_detail);
 
         mBackdrop = findViewById(R.id.movie_backdrop);
@@ -56,7 +64,6 @@ public class MainDetailActivity extends AppCompatActivity {
         mRating = findViewById(R.id.rating);
         mDateReleased = findViewById(R.id.release_date);
         mOverview = findViewById(R.id.overview);
-
 
         Intent intentThatStartedThisActivity = getIntent();
 
@@ -111,16 +118,13 @@ public class MainDetailActivity extends AppCompatActivity {
                 }
             });
 
-            // RecyclerView
             mRecyclerView = findViewById(R.id.movie_reviews);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            mRecyclerView.setLayoutManager(layoutManager);
+            mLayoutmanager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutmanager);
+            mAdapter = new ReviewAdapter();
+            mRecyclerView.setAdapter(mAdapter);
 
-            mRecyclerView.setHasFixedSize(true);
-            mReviewAdapter = new ReviewAdapter();
-            mRecyclerView.setAdapter(mReviewAdapter);
-
-            //loadReviews("movie", mMovie.getId(), "reviews");
+            loadReviews("movie", mMovie.getId(), "videos");
 
             Button reviews = findViewById(R.id.reviews);
 
@@ -145,20 +149,22 @@ public class MainDetailActivity extends AppCompatActivity {
 
     }
 
-    public ReviewAdapter getmReviewAdapter() {
-        return mReviewAdapter;
-    }
-
-    public void showMovieReviews() {
-        mRecyclerView.setVisibility(View.VISIBLE);
-    }
-
     public void loadReviews(String feature, String id, String filter) {
-        new FetchMovieFeaturesTask(this).execute(feature, id, filter);
+        NetworkInfo networkInfo = getNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            new FetchMovieFeaturesTask(this).execute(feature, id, filter);
+        }
     }
 
     public void loadTrailers(String feature, String id, String filter) {
         new FetchMovieFeaturesTask(this).execute(feature, id, filter);
+    }
+
+    public void setMovieReviews(List<Review> movieReviews) {
+        Log.v(TAG, "movie reviews" + movieReviews);
+        mReviewAdapter = new ReviewAdapter();
+        mRecyclerView.setAdapter(mReviewAdapter);
+        mReviewAdapter.setReviewData(movieReviews);
     }
 
     public void showSnackBar(String message, int duration) {
@@ -171,6 +177,13 @@ public class MainDetailActivity extends AppCompatActivity {
         //mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         //mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
+    }
+
+    private NetworkInfo getNetworkInfo() {
+        // Get a reference to the ConnectivityManager to check state of network connectivity.
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        // Get details on the currently active default data network
+        return connMgr.getActiveNetworkInfo();
     }
 
 }
