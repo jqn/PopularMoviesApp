@@ -18,7 +18,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     private static final String TAG = MovieAdapter.class.getSimpleName();
     private List<Movie> mMovies;
 
-    /*
+    /**
      * An on-click handler that we've defined to make it easy for an Activity to interface with
      * our RecyclerView
      */

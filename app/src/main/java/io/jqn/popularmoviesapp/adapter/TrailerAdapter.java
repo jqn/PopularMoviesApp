@@ -20,9 +20,14 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     // Member variable for trailers
     private List<Trailer> mTrailers;
 
+    private final TrailerAdapterOnClickHandler mClikcHandler;
 
-    public TrailerAdapter() {
+    public interface TrailerAdapterOnClickHandler {
+        void onClick(Trailer trailer);
+    }
 
+    public TrailerAdapter(TrailerAdapterOnClickHandler clickHandler) {
+        this.mClikcHandler = clickHandler;
     }
 
     /**
@@ -87,7 +92,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
      * Provide a direct reference to each of the views within a data item
      * and cache the views within the item layout for fast access
      */
-    public class TrailerAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class TrailerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        //public final TextView mTrailerTextView;
         /**
          * Set members variables for the view to be set as the render row
          */
@@ -98,6 +104,14 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
             super(view);
             mTrailerKey =  view.findViewById(R.id.trailer_name);
             mTrailerName =  view.findViewById(R.id.trailer_site);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.v(TAG, "child view clicked");
+            int adapterPosition = getAdapterPosition();
+            mClikcHandler.onClick((mTrailers.get(adapterPosition)));
         }
     }
 
