@@ -19,16 +19,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import android.widget.Toolbar;
-
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import io.jqn.popularmoviesapp.adapter.ReviewAdapter;
 import io.jqn.popularmoviesapp.adapter.TrailerAdapter;
 import io.jqn.popularmoviesapp.data.MoviesDbHelper;
@@ -47,10 +41,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
     private TextView mRating;
     private TextView mDateReleased;
     private TextView mOverview;
-
-    private List<Review> mMovieReviews;
-
-    private BottomSheetBehavior mBottomSheetBehavior;
 
     private RecyclerView mRecyclerView;
     private RecyclerView mTrailerRecyclerView;
@@ -222,12 +212,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
         Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
-    public void showBottomSheet() {
-        //View bottomSheet = findViewById(R.id.bottom_sheet);
-        //mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        //mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-    }
 
     private NetworkInfo getNetworkInfo() {
         // Get a reference to the ConnectivityManager to check state of network connectivity.
