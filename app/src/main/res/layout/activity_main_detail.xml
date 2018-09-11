@@ -148,6 +148,8 @@
 
 
         </android.support.constraint.ConstraintLayout>
-
     </ScrollView>
+    <include layout="@layout/reviews_bottom_sheet" />
+    <include layout="@layout/trailers_bottom_sheet" />
+
 </android.support.design.widget.CoordinatorLayout>

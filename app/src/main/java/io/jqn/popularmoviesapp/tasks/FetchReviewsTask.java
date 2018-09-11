@@ -2,32 +2,31 @@ package io.jqn.popularmoviesapp.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-import io.jqn.popularmoviesapp.MainDetailActivity;
-import io.jqn.popularmoviesapp.adapter.ReviewAdapter;
+import io.jqn.popularmoviesapp.ReviewActivity;
 import io.jqn.popularmoviesapp.models.Review;
 import io.jqn.popularmoviesapp.utilities.FeaturesJsonUtils;
 import io.jqn.popularmoviesapp.utilities.NetworkUtils;
 
-public class FetchMovieFeaturesTask extends AsyncTask<String, Void, List<Review>> {
+public class FetchReviewsTask  extends AsyncTask<String, Void, List<Review>>{
     private static final String TAG = FetchMovieFeaturesTask.class.getSimpleName();
 
-    MainDetailActivity mainDetailActivity;
+    ReviewActivity reviewActivity;
 
-    private ReviewAdapter mReviewAdapter;
-
-    public FetchMovieFeaturesTask(MainDetailActivity mainDetailActivity) {
-        this.mainDetailActivity = mainDetailActivity;
+    public FetchReviewsTask(ReviewActivity reviewActivity) {
+        this.reviewActivity = reviewActivity;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         // Show loading here
+        reviewActivity.showLoadingIndicator();
     }
 
     @Override
@@ -65,12 +64,9 @@ public class FetchMovieFeaturesTask extends AsyncTask<String, Void, List<Review>
         Log.v(TAG, "review data task" + reviewData);
         if (reviewData != null) {
             Log.v(TAG, "we have reviews");
-            this.mainDetailActivity.setMovieReviews(reviewData);
+            this.reviewActivity.setMovieReviews(reviewData);
         } else {
-            this.mainDetailActivity.showSnackBar("No review content available");
+            this.reviewActivity.showSnackBar("No review content available");
         }
     }
-
 }
-
-
