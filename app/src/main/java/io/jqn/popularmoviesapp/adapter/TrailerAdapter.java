@@ -68,7 +68,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         Trailer trailer = mTrailers.get(position);
 
         // Set item views based on the views and data model
-        trailerAdapterViewHolder.mTrailerKey.setText(trailer.getTrailerKey());
+        //trailerAdapterViewHolder.mTrailerKey.setText(trailer.getTrailerKey());
         trailerAdapterViewHolder.mTrailerName.setText(trailer.getTrailerName());
     }
 
@@ -97,12 +97,12 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         /**
          * Set members variables for the view to be set as the render row
          */
-        public final TextView mTrailerKey;
+        //public final TextView mTrailerKey;
         public final TextView mTrailerName;
 
         public TrailerAdapterViewHolder(View view) {
             super(view);
-            mTrailerKey =  view.findViewById(R.id.trailer_name);
+            //mTrailerKey =  view.findViewById(R.id.trailer_name);
             mTrailerName =  view.findViewById(R.id.trailer_site);
             view.setOnClickListener(this);
         }
