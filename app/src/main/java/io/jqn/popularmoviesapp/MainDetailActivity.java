@@ -8,13 +8,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -47,12 +47,10 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
 
     private RecyclerView mRecyclerView;
     private RecyclerView mTrailerRecyclerView;
-    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutmanager;
 
     private ReviewAdapter mReviewAdapter;
     private TrailerAdapter mTrailerAdapter;
-    private RecyclerView.Adapter mTAdapter;
     private RecyclerView.LayoutManager mLayoutmanagerTrailers;
 
     private final String BASE_YOUTUBE_URL_APP = "vnd.youtube:";
@@ -60,6 +58,8 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
 
     private BottomSheetBehavior mReviewBottomSheetBehavior;
     private BottomSheetBehavior mTrailerBottomSheetBehavior;
+
+    public static Parcelable mTrailers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +150,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
         // Adapters
 
 
-
         final Button reviews = findViewById(R.id.reviews);
 
         Button trailers = findViewById(R.id.trailers);
@@ -176,17 +175,23 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("MOVIE", mMovie);
+        outState.putParcelable("TRAILERS", mLayoutmanagerTrailers.onSaveInstanceState());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mMovie = (Movie) savedInstanceState.getSerializable("MOVIE");
+        mTrailers = savedInstanceState.getParcelable("TRAILERS");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (mTrailers != null) {
+            mLayoutmanagerTrailers.onRestoreInstanceState(mTrailers);
+            mTrailers = null;
+        }
     }
 
     public void loadReviews(String feature, String id, String filter) {

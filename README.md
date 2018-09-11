@@ -1,4 +1,4 @@
-# Popular Movies App version 1.0
+# Popular Movies App version 2.0
 
 <img width="25%" src="demo/grid.png" style="margin-right:16px"/> <img width="25%" src="demo/drawer.png" style="padding-right:16px"/> <img width="25%" src="demo/detail.png" />
 
