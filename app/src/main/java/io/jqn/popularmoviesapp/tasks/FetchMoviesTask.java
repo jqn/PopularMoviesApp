@@ -1,7 +1,6 @@
 package io.jqn.popularmoviesapp.tasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.net.URL;
 import java.util.Collections;
@@ -54,11 +53,10 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
     @Override
     protected void onPostExecute(List<Movie> movieData) {
-        Log.v(TAG, "movie data task ****" + movieData);
         this.mainActivity.hideLoadingIndicator();
         if (movieData != null) {
-           this.mainActivity.showMovieDataView();
-           this.mainActivity.setMoviePosters(movieData);
+            this.mainActivity.showMovieDataView();
+            this.mainActivity.setMoviePosters(movieData);
         } else {
             this.mainActivity.showErrorMessage();
         }

@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
+
 import io.jqn.popularmoviesapp.R;
 import io.jqn.popularmoviesapp.models.Movie;
 
@@ -52,6 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             mMoviePosterImageView = view.findViewById(R.id.movie_poster);
             view.setOnClickListener(this);
         }
+
         /**
          * This gets called by the child views during a click.
          *
@@ -94,16 +98,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      * passed into us.
      *
      * @param movieAdapterViewHolder The ViewHolder which should be updated to represent the
-     *                                  contents of the item at the given position in the data set.
-     * @param position                  The position of the item within the adapter's data set.
+     *                               contents of the item at the given position in the data set.
+     * @param position               The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder (MovieAdapterViewHolder movieAdapterViewHolder, int position) {
+    public void onBindViewHolder(MovieAdapterViewHolder movieAdapterViewHolder, int position) {
         setMoviePostersOnline(movieAdapterViewHolder, position);
     }
 
-    private void setMoviePostersOnline(final MovieAdapterViewHolder movieAdapterViewHolder, final  int position) {
-    Log.v(TAG, "set movies called");
+    private void setMoviePostersOnline(final MovieAdapterViewHolder movieAdapterViewHolder, final int position) {
         String mMoviePosterPath = mMovies.get(position).getPosterPath();
         /**
          * TODO - remove hardcoded poster url

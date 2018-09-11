@@ -74,9 +74,7 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
 
         if (savedInstanceState != null) {
             mMovie = (Movie) savedInstanceState.getSerializable("MOVIE");
-            Log.v(TAG, "saved instace not null");
         } else {
-            Log.v(TAG, "saved instace null");
             mMovie = (Movie) getIntent().getExtras().getSerializable("movie");
         }
 
@@ -95,7 +93,7 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
         SharedPreferences preferences = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
 
         boolean checked = preferences.getBoolean(mMovie.getId(), false);
-        Log.v(TAG, "favorite" + checked);
+
         toggle.setChecked(checked);
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -112,7 +110,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
                     editor.commit();
 
                     // Add to favorites table
-                    Log.v(TAG, "insert favorite");
                     db.addFavorite(mMovie.getId(), mMovie.getTitle(), mMovie.getPosterPath(), mMovie.getBackdropPath(), mMovie.getUserRating(), mMovie.getReleaseDate(), mMovie.getOverview());
                 } else {
                     SharedPreferences editor = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
@@ -121,7 +118,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
                     edit.apply();
 
                     // Remove from favorites table
-                    Log.v(TAG, "delete favorite");
                     db.removeFavorite(mMovie.getTitle());
                 }
             }
@@ -180,14 +176,12 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("MOVIE", mMovie);
-        Log.v(TAG, "movie saved");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mMovie = (Movie) savedInstanceState.getSerializable("MOVIE");
-        Log.v(TAG, "Getting stuff");
     }
 
     @Override
@@ -228,9 +222,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
         if (movieReviews.isEmpty()) {
             showSnackBar("No review content available");
         } else {
-            //mReviewAdapter = new ReviewAdapter();
-            //mRecyclerView.setAdapter(mReviewAdapter);
-            //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
             mReviewAdapter.setReviewData(movieReviews);
             mReviewBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
@@ -240,9 +231,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
         if (movieTrailers.isEmpty()) {
             showSnackBar("No review content available");
         } else {
-            //mTrailerAdapter = new TrailerAdapter(this);
-            //mTrailerRecyclerView.setAdapter(mTrailerAdapter);
-            //mTrailerRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
             mTrailerAdapter.setTrailerData(movieTrailers);
             mTrailerBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }

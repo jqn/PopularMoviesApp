@@ -107,7 +107,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
     }
 
     public void setReviewData(List<Review> reviewData) {
-        Log.v(TAG, "review data adapter *******" + reviewData);
         mReviews = reviewData;
         notifyDataSetChanged();
     }

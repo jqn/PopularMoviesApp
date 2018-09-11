@@ -82,8 +82,6 @@ public final class MoviesJsonUtils {
             movies.add(movie);
         }
 
-        Log.v(TAG, "moviesjson" + movies);
-
         return movies;
 
     }

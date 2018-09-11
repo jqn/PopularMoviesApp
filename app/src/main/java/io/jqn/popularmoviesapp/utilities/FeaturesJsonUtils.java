@@ -57,9 +57,6 @@ public class FeaturesJsonUtils {
 
             /* Get the review url */
             String url = reviewJson.getString(REVIEW_URL);
-
-            Log.v(TAG, "review json ****" + id);
-
             /**
              * Create a new review object with selected properties.
              */
@@ -72,7 +69,7 @@ public class FeaturesJsonUtils {
 
     }
 
-    public static List<Trailer> getTrailerStringsFromJson(String trailersJsonStr) throws JSONException  {
+    public static List<Trailer> getTrailerStringsFromJson(String trailersJsonStr) throws JSONException {
         final String TRAILER_LIST = "results";
         final String ID = "id";
         final String KEY = "key";
@@ -84,8 +81,6 @@ public class FeaturesJsonUtils {
 
         // Create a JSONObject from the JSON response string
         JSONObject trailersJson = new JSONObject(trailersJsonStr);
-
-        Log.v(TAG, "get json strings");
 
         // Extract the JSONArray associated with the key called "results",
         JSONArray movieArray = trailersJson.getJSONArray(TRAILER_LIST);
@@ -113,8 +108,6 @@ public class FeaturesJsonUtils {
 
             trailers.add(trailer);
         }
-
-        Log.v(TAG, "trailers json ****" + trailers);
 
 
         return trailers;

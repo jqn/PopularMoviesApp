@@ -161,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
      * @param movie The movie that was clicked
      */
     public void onClick(Movie movie) {
-        Log.v(TAG, "main activity click");
         Intent movieDetailIntent = new Intent(MainActivity.this, MainDetailActivity.class);
         movieDetailIntent.putExtra("movie", movie);
         startActivity(movieDetailIntent);

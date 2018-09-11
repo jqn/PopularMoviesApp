@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import io.jqn.popularmoviesapp.models.Movie;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.jqn.popularmoviesapp.models.Movie;
 
 public class MoviesDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "movies.db";
@@ -54,10 +56,12 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MoviesContract.FavoritesEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
+
     /**
      * Adds new favorite to the movie database
-     * @param movieId the movie id from the moviedb payload
-     * @param  movieName Movie name
+     *
+     * @param movieId     the movie id from the moviedb payload
+     * @param movieName   Movie name
      * @param moviePoster the path to the movie poster
      */
     public void addFavorite(String movieId, String movieName, String moviePoster, String movieBackdrop, String movieRating, String movieReleaseDate, String movieOverview) {

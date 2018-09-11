@@ -1,7 +1,6 @@
 package io.jqn.popularmoviesapp.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Model class represents a review

@@ -68,7 +68,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         Trailer trailer = mTrailers.get(position);
 
         // Set item views based on the views and data model
-        //trailerAdapterViewHolder.mTrailerKey.setText(trailer.getTrailerKey());
         trailerAdapterViewHolder.mTrailerName.setText(trailer.getTrailerName());
     }
 
@@ -80,10 +79,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     @Override
     public int getItemCount() {
         if (mTrailers == null) {
-            Log.v(TAG, "trailers are null " );
             return 0;
         } else {
-            Log.v(TAG, "trailers are not null " +  mTrailers.size() );
             return mTrailers.size();
         }
     }
@@ -102,21 +99,18 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
 
         public TrailerAdapterViewHolder(View view) {
             super(view);
-            //mTrailerKey =  view.findViewById(R.id.trailer_name);
             mTrailerName =  view.findViewById(R.id.trailer_site);
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            Log.v(TAG, "child view clicked");
             int adapterPosition = getAdapterPosition();
             mClikcHandler.onClick((mTrailers.get(adapterPosition)));
         }
     }
 
     public void setTrailerData(List<Trailer> trailerData) {
-        Log.v(TAG, "trailer data adapter *******" + trailerData);
         mTrailers = trailerData;
         notifyDataSetChanged();
     }

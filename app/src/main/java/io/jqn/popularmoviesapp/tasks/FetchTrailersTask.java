@@ -1,12 +1,9 @@
 package io.jqn.popularmoviesapp.tasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
-
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
-
 import io.jqn.popularmoviesapp.MainDetailActivity;
 import io.jqn.popularmoviesapp.models.Trailer;
 import io.jqn.popularmoviesapp.utilities.FeaturesJsonUtils;
@@ -41,7 +38,6 @@ public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
 
         try {
             String jsonTrailerResponse = NetworkUtils.getResponseFromHttpUrl(trailersRequestUrl);
-            Log.v(TAG, "json response" + jsonTrailerResponse);
 
             List<Trailer> trailerJsonData = FeaturesJsonUtils.getTrailerStringsFromJson(jsonTrailerResponse);
 
@@ -55,7 +51,6 @@ public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
 
     @Override
     protected void onPostExecute(List<Trailer> trailerData) {
-        Log.v(TAG, "trailer data task ****" + trailerData);
         if (trailerData != null) {
             this.mainDetailActivity.setMovieTrailers(trailerData);
         } else {

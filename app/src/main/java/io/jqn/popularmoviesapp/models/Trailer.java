@@ -1,9 +1,11 @@
 package io.jqn.popularmoviesapp.models;
 
+import java.io.Serializable;
+
 /**
  * Model class represents a trailer
  */
-public class Trailer {
+public class Trailer implements Serializable {
     private String mId;
     private String mKey;
     private String mName;
