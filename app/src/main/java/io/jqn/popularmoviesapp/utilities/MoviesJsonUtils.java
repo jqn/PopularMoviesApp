@@ -71,8 +71,6 @@ public final class MoviesJsonUtils {
 
             /* Get the movie overview */
             String overview = movieJson.getString(OVERVIEW);
-            Log.v(TAG, "movie json ****" + id);
-
 
             /**
              * Create a new Movie object with selected properties.

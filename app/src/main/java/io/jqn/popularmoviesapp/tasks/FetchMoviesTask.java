@@ -54,12 +54,14 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
     @Override
     protected void onPostExecute(List<Movie> movieData) {
         this.mainActivity.hideLoadingIndicator();
+
         if (movieData != null) {
             this.mainActivity.showMovieDataView();
             this.mainActivity.setMoviePosters(movieData);
         } else {
             this.mainActivity.showErrorMessage();
         }
+
 
     }
 

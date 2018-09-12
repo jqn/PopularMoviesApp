@@ -1,13 +1,13 @@
 package io.jqn.popularmoviesapp;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import java.util.List;
+
 import io.jqn.popularmoviesapp.adapter.MovieAdapter;
 import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private MoviesDbHelper mMovieDbHelper;
 
     private GridLayoutManager mGridLayoutManager;
-    private static Parcelable mMovieGridState;
+    private Parcelable recyclerPosition;
     private static final String RECYCLER_POSITION = "RecyclerViewPosition";
 
     @Override
@@ -130,24 +132,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
          */
         mLoadingIndicator = findViewById(R.id.grid_loading_indicator);
 
+        if (savedInstanceState != null) {
+            recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
+        }
+
         loadMovieData("movie", "popular");
 
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(RECYCLER_POSITION,
-                mRecyclerView.getLayoutManager().onSaveInstanceState());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_POSITION)) {
-            Log.v(TAG, "onRestoreInstanceState" + savedInstanceState.getParcelable(RECYCLER_POSITION));
-            //mRecyclerView = savedInstanceState.getParcelable(RECYCLER_POSITION);
-        }
     }
 
 
@@ -206,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void showMovieDataView() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
+
     }
 
     public void setMoviePosters(List<Movie> movieData) {
@@ -223,4 +214,28 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        recyclerPosition = mGridLayoutManager.onSaveInstanceState();
+        outState.putParcelable(RECYCLER_POSITION,
+                mRecyclerView.getLayoutManager().onSaveInstanceState());
+        this.showLoadingIndicator();
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGridLayoutManager.onRestoreInstanceState(recyclerPosition);
+    }
+
 }

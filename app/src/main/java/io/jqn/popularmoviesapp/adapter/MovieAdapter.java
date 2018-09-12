@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import io.jqn.popularmoviesapp.MainActivity;
 import io.jqn.popularmoviesapp.R;
 import io.jqn.popularmoviesapp.models.Movie;
 
