@@ -1,6 +1,7 @@
 package io.jqn.popularmoviesapp;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -40,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
      * Provide access to the movie database
      */
     private MoviesDbHelper mMovieDbHelper;
+
+    private GridLayoutManager mGridLayoutManager;
+    private static Parcelable mMovieGridState;
+    private static final String RECYCLER_POSITION = "RecyclerViewPosition";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +102,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView = findViewById(R.id.movies);
         mErrorMessageDisplay = findViewById(R.id.movie_error_message_display);
 
-        final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
+        mGridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
 
-        mRecyclerView.setLayoutManager(gridLayoutManager);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
 
         /**
          * Use this setting to improve performance that changes in content do not change the child
@@ -128,6 +133,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         loadMovieData("movie", "popular");
 
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(RECYCLER_POSITION,
+                mRecyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_POSITION)) {
+            Log.v(TAG, "onRestoreInstanceState" + savedInstanceState.getParcelable(RECYCLER_POSITION));
+            //mRecyclerView = savedInstanceState.getParcelable(RECYCLER_POSITION);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
