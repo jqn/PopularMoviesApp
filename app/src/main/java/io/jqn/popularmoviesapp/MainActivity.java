@@ -45,8 +45,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private MoviesDbHelper mMovieDbHelper;
 
     private GridLayoutManager mGridLayoutManager;
-    private Parcelable recyclerPosition;
+
     private static final String RECYCLER_POSITION = "RecyclerViewPosition";
+    static final String FILTER_STATE = "popular";
+    String mFilterState;
+    private Parcelable recyclerPosition;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +79,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
                         switch (item.getItemId()) {
                             case R.id.set_popular:
-                                Log.v(TAG, "clicked popular");
                                 loadMovieData("movie", "popular");
                                 setTitle("Popular");
+                                mFilterState = "popular";
                                 return true;
                             case R.id.set_trending:
                                 loadMovieData("movie", "top_rated");
                                 setTitle("Top Rated");
+                                mFilterState = "top_rated";
                                 return true;
                             case R.id.set_favorites:
-                                MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
-                                List<Movie> movieList = db.getFavorites();
-
-                                setMoviePosters(movieList);
-
-                                setTitle("Favorites");
+                                getFavorites();
                                 return true;
                         }
 
@@ -134,9 +134,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         if (savedInstanceState != null) {
             recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
-        }
+            mFilterState = savedInstanceState.getString(FILTER_STATE);
+            Log.v(TAG, "save state is not null ***** " + mFilterState);
+            if (mFilterState.equals("favorites")) {
+                getFavorites();
+            } else {
 
-        loadMovieData("movie", "popular");
+                loadMovieData("movie", mFilterState);
+            }
+        } else {
+            Log.v(TAG, "save state is null ******");
+            loadMovieData("movie", "popular");
+        }
 
     }
 
@@ -164,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     /* Tell the background method to get popular movies in the background */
     private void loadMovieData(String media, String filter) {
         new FetchMoviesTask(this).execute(media, filter);
+        Log.v(TAG, "fetching movies");
     }
 
     /**
@@ -216,26 +226,34 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mFilterState = savedInstanceState.getString(FILTER_STATE);
+        Log.v(TAG, "Restoring state *****");
+        recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
+
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+
         recyclerPosition = mGridLayoutManager.onSaveInstanceState();
         outState.putParcelable(RECYCLER_POSITION,
                 mRecyclerView.getLayoutManager().onSaveInstanceState());
         this.showLoadingIndicator();
+        outState.putString(FILTER_STATE, mFilterState);
+        Log.v(TAG, "Saving state *****");
+        super.onSaveInstanceState(outState);
 
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
+    protected void getFavorites() {
+        MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
+        List<Movie> movieList = db.getFavorites();
+        setMoviePosters(movieList);
+        setTitle("Favorites");
+        mFilterState = "favorites";
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mGridLayoutManager.onRestoreInstanceState(recyclerPosition);
-    }
 
 }

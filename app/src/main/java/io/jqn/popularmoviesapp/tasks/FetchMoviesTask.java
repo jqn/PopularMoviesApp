@@ -1,6 +1,7 @@
 package io.jqn.popularmoviesapp.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.net.URL;
 import java.util.Collections;
@@ -37,6 +38,8 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         String mediatType = params[0];
         String contentType = params[1];
         URL moviesRequestUrl = NetworkUtils.buildURL(mediatType, contentType);
+
+        Log.v(TAG, "url " + moviesRequestUrl);
 
         try {
             String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
