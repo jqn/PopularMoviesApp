@@ -46,10 +46,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private GridLayoutManager mGridLayoutManager;
 
-    private static final String RECYCLER_POSITION = "RecyclerViewPosition";
-    static final String FILTER_STATE = "popular";
-    String mFilterState;
-    private Parcelable recyclerPosition;
+    static final String FILTER_STATE = "filter";
+    String mFilterState ="popular";
 
 
     @Override
@@ -133,13 +131,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mLoadingIndicator = findViewById(R.id.grid_loading_indicator);
 
         if (savedInstanceState != null) {
-            recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
             mFilterState = savedInstanceState.getString(FILTER_STATE);
             Log.v(TAG, "save state is not null ***** " + mFilterState);
             if (mFilterState.equals("favorites")) {
                 getFavorites();
             } else {
-
                 loadMovieData("movie", mFilterState);
             }
         } else {
@@ -230,16 +226,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onRestoreInstanceState(savedInstanceState);
         mFilterState = savedInstanceState.getString(FILTER_STATE);
         Log.v(TAG, "Restoring state *****");
-        recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
 
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-
-        recyclerPosition = mGridLayoutManager.onSaveInstanceState();
-        outState.putParcelable(RECYCLER_POSITION,
-                mRecyclerView.getLayoutManager().onSaveInstanceState());
         this.showLoadingIndicator();
         outState.putString(FILTER_STATE, mFilterState);
         Log.v(TAG, "Saving state *****");
@@ -254,6 +245,5 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setTitle("Favorites");
         mFilterState = "favorites";
     }
-
 
 }
