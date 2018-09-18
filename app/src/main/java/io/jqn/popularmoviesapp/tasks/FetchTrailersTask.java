@@ -1,9 +1,11 @@
 package io.jqn.popularmoviesapp.tasks;
 
 import android.os.AsyncTask;
+
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
+
 import io.jqn.popularmoviesapp.MainDetailActivity;
 import io.jqn.popularmoviesapp.models.Trailer;
 import io.jqn.popularmoviesapp.utilities.FeaturesJsonUtils;

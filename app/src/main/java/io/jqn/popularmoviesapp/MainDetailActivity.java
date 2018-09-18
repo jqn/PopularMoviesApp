@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
@@ -31,7 +30,6 @@ import java.util.List;
 import io.jqn.popularmoviesapp.adapter.ReviewAdapter;
 import io.jqn.popularmoviesapp.adapter.TrailerAdapter;
 import io.jqn.popularmoviesapp.data.MoviesContract;
-import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
 import io.jqn.popularmoviesapp.models.Review;
 import io.jqn.popularmoviesapp.models.Trailer;
@@ -39,6 +37,7 @@ import io.jqn.popularmoviesapp.tasks.FetchMovieFeaturesTask;
 import io.jqn.popularmoviesapp.tasks.FetchTrailersTask;
 
 public class MainDetailActivity extends AppCompatActivity implements TrailerAdapter.TrailerAdapterOnClickHandler {
+
     public static final String TAG = MainDetailActivity.class.getSimpleName();
 
     private Movie mMovie;
@@ -103,8 +102,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                /* Create a DB helper (this will crate the DB if run for the first time) */
-                //MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
                 SharedPreferences sharedPreferences;
                 if (isChecked) {
                     sharedPreferences = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
@@ -127,13 +124,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
 
                     Uri uri = getContentResolver().insert(MoviesContract.FavoritesEntry.CONTENT_URI, contentValues);
 
-                    //if (uri != null) {
-                    //    Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
-                    //}
-
-                    //finish();
-                    //db.addFavorite(mMovie.getId(), mMovie.getTitle(), mMovie.getPosterPath(), mMovie.getBackdropPath(), mMovie.getUserRating(), mMovie.getReleaseDate(), mMovie.getOverview());
-
                 } else {
                     SharedPreferences editor = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
                     SharedPreferences.Editor edit = editor.edit();
@@ -141,7 +131,10 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
                     edit.apply();
 
                     // Remove from favorites table
-                    //db.removeFavorite(mMovie.getTitle());
+                    String id = mMovie.getId();
+                    Uri uri = MoviesContract.FavoritesEntry.CONTENT_URI;
+                    uri = uri.buildUpon().appendPath(id).build();
+                    getContentResolver().delete(uri, null, null);
                 }
             }
         });
@@ -170,9 +163,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
         mRecyclerView.setLayoutManager(mLayoutmanager);
         mTrailerRecyclerView.setLayoutManager(mLayoutmanagerTrailers);
 
-        // Adapters
-
-
         final Button reviews = findViewById(R.id.reviews);
 
         Button trailers = findViewById(R.id.trailers);
@@ -192,29 +182,6 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
         });
 
 
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable("MOVIE", mMovie);
-        outState.putParcelable("TRAILERS", mLayoutmanagerTrailers.onSaveInstanceState());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mMovie = (Movie) savedInstanceState.getSerializable("MOVIE");
-        mTrailers = savedInstanceState.getParcelable("TRAILERS");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mTrailers != null) {
-            mLayoutmanagerTrailers.onRestoreInstanceState(mTrailers);
-            mTrailers = null;
-        }
     }
 
     public void loadReviews(String feature, String id, String filter) {

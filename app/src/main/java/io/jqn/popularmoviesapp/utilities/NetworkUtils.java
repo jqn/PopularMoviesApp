@@ -1,10 +1,6 @@
 package io.jqn.popularmoviesapp.utilities;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,14 +50,14 @@ public class NetworkUtils {
         return url;
     }
 
-    public static URL buildFeatureURL(String featureType, String id, String filter ) {
+    public static URL buildFeatureURL(String featureType, String id, String filter) {
         Uri builtUri = Uri.parse(STATIC_MOVIE_DB_URL).buildUpon()
-        .appendPath(API_VERSION)
-        .appendPath(featureType)
-        .appendPath(id)
-        .appendPath(filter)
-        .appendQueryParameter(QUERY_PARAM, KEY)
-        .build();
+                .appendPath(API_VERSION)
+                .appendPath(featureType)
+                .appendPath(id)
+                .appendPath(filter)
+                .appendQueryParameter(QUERY_PARAM, KEY)
+                .build();
 
         URL url = null;
         try {

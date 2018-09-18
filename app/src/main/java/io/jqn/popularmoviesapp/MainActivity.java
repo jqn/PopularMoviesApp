@@ -1,18 +1,17 @@
 package io.jqn.popularmoviesapp;
 
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,7 +29,7 @@ import io.jqn.popularmoviesapp.tasks.FetchMoviesTask;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, LoaderManager.LoaderCallbacks<List<Movie>> {
     // Constants for logging and referring to a unique loader
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int TASK_LOADER_ID = 0;
+    private static final int MOVIE_LOADER_ID = 0;
     /**
      * References to the drawer menu
      */
@@ -43,17 +42,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
-    /**
-     * Provide access to the movie database
-     */
-
     private GridLayoutManager mGridLayoutManager;
 
     private int mMovieLoaderId;
 
     static final String FILTER_STATE = "filter";
     String mFilterState = "popular";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,16 +72,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                         switch (item.getItemId()) {
                             case R.id.set_popular:
                                 loadMovieData("movie", "popular");
-                                setTitle("Popular");
                                 mFilterState = "popular";
+                                setActionBarTitle(mFilterState);
                                 return true;
                             case R.id.set_trending:
                                 loadMovieData("movie", "top_rated");
-                                setTitle("Top Rated");
                                 mFilterState = "top_rated";
+                                setActionBarTitle(mFilterState);
                                 return true;
                             case R.id.set_favorites:
                                 getFavorites();
+                                mFilterState = "favorites";
+                                setActionBarTitle(mFilterState);
                                 return true;
                         }
 
@@ -132,19 +128,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         if (savedInstanceState != null) {
             mFilterState = savedInstanceState.getString(FILTER_STATE);
-            Log.v(TAG, "save state is not null ***** " + mFilterState);
             if (mFilterState.equals("favorites")) {
+                setActionBarTitle(mFilterState);
                 getFavorites();
             } else {
                 loadMovieData("movie", mFilterState);
+                setActionBarTitle(mFilterState);
             }
         } else {
-            Log.v(TAG, "save state is null ******");
             loadMovieData("movie", "popular");
         }
         mMovieLoaderId = FetchFavoritesTask.ID;
         // Setting loaders
-        getSupportLoaderManager().initLoader(mMovieLoaderId, null, this).forceLoad();
+        getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, null, this).forceLoad();
 
     }
 
@@ -168,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         // If we got here the users's action was not recognized
         return super.onOptionsItemSelected(item);
     }
+
     @NonNull
     @Override
     public Loader<List<Movie>> onCreateLoader(int id, @Nullable Bundle args) {
@@ -193,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     /* Tell the background method to get popular movies in the background */
     private void loadMovieData(String media, String filter) {
         new FetchMoviesTask(this).execute(media, filter);
-        Log.v(TAG, "fetching movies");
     }
 
     /**
@@ -249,7 +245,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mFilterState = savedInstanceState.getString(FILTER_STATE);
-        Log.v(TAG, "Restoring state *****");
 
     }
 
@@ -257,23 +252,31 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onSaveInstanceState(Bundle outState) {
         this.showLoadingIndicator();
         outState.putString(FILTER_STATE, mFilterState);
-        Log.v(TAG, "Saving state *****");
         super.onSaveInstanceState(outState);
 
     }
 
     protected void getFavorites() {
-        mMovieLoaderId = FetchFavoritesTask.ID;
-        if(getSupportLoaderManager().getLoader(mMovieLoaderId) == null) {
-            getSupportLoaderManager().initLoader(mMovieLoaderId, null, this).forceLoad();
+        if (getSupportLoaderManager().getLoader(mMovieLoaderId) == null) {
+            getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, null, this).forceLoad();
         } else {
-            getSupportLoaderManager().getLoader(mMovieLoaderId).forceLoad();
+            getSupportLoaderManager().getLoader(MOVIE_LOADER_ID).forceLoad();
         }
-        //MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
-        //List<Movie> movieList = db.getFavorites();
-        //setMoviePosters(movieList);
-        setTitle("Favorites");
-        //mFilterState = "favorites";
+    }
+
+    public void setActionBarTitle(String title) {
+        switch (title) {
+            case "popular":
+                setTitle("Popular");
+                break;
+            case "top_rated":
+                setTitle("Top Rated");
+                break;
+            case "favorites":
+                setTitle("Favorites");
+                break;
+        }
+
     }
 
 }

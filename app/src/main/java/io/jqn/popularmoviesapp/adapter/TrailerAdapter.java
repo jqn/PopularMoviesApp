@@ -1,9 +1,7 @@
 package io.jqn.popularmoviesapp.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +57,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
      * is conveniently passed in.
      *
      * @param TrailerAdapterViewHolder The ViewHolder which should be updated to represent the
-     *                                contents of the item at the given position in the data set.
-     * @param position                The position of the item within the adapter's data set.
+     *                                 contents of the item at the given position in the data set.
+     * @param position                 The position of the item within the adapter's data set.
      */
     @Override
     public void onBindViewHolder(TrailerAdapterViewHolder trailerAdapterViewHolder, int position) {
@@ -99,7 +97,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
 
         public TrailerAdapterViewHolder(View view) {
             super(view);
-            mTrailerName =  view.findViewById(R.id.trailer_site);
+            mTrailerName = view.findViewById(R.id.trailer_site);
             view.setOnClickListener(this);
         }
 

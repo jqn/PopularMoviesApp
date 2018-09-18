@@ -20,21 +20,25 @@ public class Review implements Serializable {
         mContent = content;
         mUrl = url;
     }
+
     // Gets the review ID
     public String getReviewId() {
         return mId;
     }
+
     // Gets the author name
     public String getReviewAuthor() {
         return mAuthor;
     }
+
     // Gets the review content
     public String getReviewContent() {
         return mContent;
     }
+
     // Gets the review url
     public String getReviewUrl() {
-        return  mUrl;
+        return mUrl;
     }
 
 }

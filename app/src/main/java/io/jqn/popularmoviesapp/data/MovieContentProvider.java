@@ -15,6 +15,7 @@ import static io.jqn.popularmoviesapp.data.MoviesContract.FavoritesEntry.TABLE_N
 public class MovieContentProvider extends ContentProvider {
     public static final int MOVIES = 100;
     public static final int MOVIES_WITH_ID = 101;
+    public static final String TAG = MovieContentProvider.class.getSimpleName();
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -101,8 +102,27 @@ public class MovieContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
+        final SQLiteDatabase db = mMoviesDbHelper.getWritableDatabase();
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        int match = sUriMatcher.match(uri);
+
+        int favoritesDeleted;
+
+        switch (match) {
+            case MOVIES_WITH_ID:
+                String id = uri.getPathSegments().get(1);
+                //favoritesDeleted = db.delete(TABLE_NAME, "_id=?", new String[]{id});
+                String mWhereClause = MoviesContract.FavoritesEntry.COLUMN_MOVIE_ID + "=?";
+                String[] mWhereArgs = new String[]{id};
+                favoritesDeleted = db.delete(MoviesContract.FavoritesEntry.TABLE_NAME,
+                        mWhereClause,
+                        mWhereArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return favoritesDeleted;
     }
 
 
@@ -116,7 +136,6 @@ public class MovieContentProvider extends ContentProvider {
 
     @Override
     public String getType(@NonNull Uri uri) {
-
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

@@ -7,9 +7,10 @@ import android.provider.BaseColumns;
  * Defines tables and column names for the movie database.
  */
 public class MoviesContract {
-    public static final String AUTHORITY  = "io.jqn.popularmoviesapp";
+    public static final String AUTHORITY = "io.jqn.popularmoviesapp";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String PATH_MOVIES = "movies";
+
     // Inner class FavoritesEntry implements BaseColumns interface
     public static final class FavoritesEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();

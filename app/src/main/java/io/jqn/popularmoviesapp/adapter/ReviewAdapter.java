@@ -1,15 +1,12 @@
 package io.jqn.popularmoviesapp.adapter;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.jqn.popularmoviesapp.R;
@@ -61,7 +58,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
      * @param reviewAdapterViewHolder The ViewHolder which should be updated to represent the
      *                                contents of the item at the given position in the data set.
      * @param position                The position of the item within the adapter's data set.
-    // */
+     *                                //
+     */
     @Override
     public void onBindViewHolder(ReviewAdapterViewHolder reviewAdapterViewHolder, int position) {
         // Get the data model based on position
@@ -80,12 +78,15 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
     @Override
     public int getItemCount() {
         if (mReviews == null) {
-            Log.v(TAG, "reviews are null " );
             return 0;
         } else {
-            Log.v(TAG, "reviews are not null " +  mReviews.size() );
             return mReviews.size();
         }
+    }
+
+    public void setReviewData(List<Review> reviewData) {
+        mReviews = reviewData;
+        notifyDataSetChanged();
     }
 
     /**
@@ -101,13 +102,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
 
         public ReviewAdapterViewHolder(View view) {
             super(view);
-            mReviewAuthor =  view.findViewById(R.id.review_author);
-            mReviewContent =  view.findViewById(R.id.review_content);
+            mReviewAuthor = view.findViewById(R.id.review_author);
+            mReviewContent = view.findViewById(R.id.review_content);
         }
-    }
-
-    public void setReviewData(List<Review> reviewData) {
-        mReviews = reviewData;
-        notifyDataSetChanged();
     }
 }

@@ -20,20 +20,24 @@ public class Trailer implements Serializable {
         mName = name;
         mSite = site;
     }
+
     // Gets the trailer ID
     public String getTrailerId() {
         return mId;
     }
+
     // Gets the trailer key
     public String getTrailerKey() {
         return mKey;
     }
+
     // Gets the trailer name
     public String getTrailerName() {
         return mName;
     }
+
     // Gets the trailer site
     public String getTrailerSite() {
-        return  mSite;
+        return mSite;
     }
 }

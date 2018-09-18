@@ -2,7 +2,6 @@ package io.jqn.popularmoviesapp.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import io.jqn.popularmoviesapp.MainActivity;
 import io.jqn.popularmoviesapp.R;
 import io.jqn.popularmoviesapp.models.Movie;
 
@@ -20,20 +18,12 @@ import io.jqn.popularmoviesapp.models.Movie;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
     private static final String TAG = MovieAdapter.class.getSimpleName();
-    private List<Movie> mMovies;
-
     /**
      * An on-click handler that we've defined to make it easy for an Activity to interface with
      * our RecyclerView
      */
     private final MovieAdapterOnClickHandler mClickHandler;
-
-    /**
-     * The interface that receives onClick messages.
-     */
-    public interface MovieAdapterOnClickHandler {
-        void onClick(Movie movie);
-    }
+    private List<Movie> mMovies;
 
     /**
      * Creates a MovieAdapter.
@@ -43,31 +33,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      */
     public MovieAdapter(MovieAdapterOnClickHandler clickHandler) {
         this.mClickHandler = clickHandler;
-    }
-
-    /**
-     * Cache the children views for a forecast grid item
-     */
-    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public final ImageView mMoviePosterImageView;
-
-        public MovieAdapterViewHolder(View view) {
-            super(view);
-            mMoviePosterImageView = view.findViewById(R.id.movie_poster);
-            view.setOnClickListener(this);
-        }
-
-        /**
-         * This gets called by the child views during a click.
-         *
-         * @param v The View that was clicked
-         */
-        @Override
-        public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-
-            mClickHandler.onClick(mMovies.get(adapterPosition));
-        }
     }
 
     /**
@@ -137,5 +102,37 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     public void setMoviePosters(List<Movie> movies) {
         mMovies = movies;
         notifyDataSetChanged();
+    }
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface MovieAdapterOnClickHandler {
+        void onClick(Movie movie);
+    }
+
+    /**
+     * Cache the children views for a forecast grid item
+     */
+    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public final ImageView mMoviePosterImageView;
+
+        public MovieAdapterViewHolder(View view) {
+            super(view);
+            mMoviePosterImageView = view.findViewById(R.id.movie_poster);
+            view.setOnClickListener(this);
+        }
+
+        /**
+         * This gets called by the child views during a click.
+         *
+         * @param v The View that was clicked
+         */
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+
+            mClickHandler.onClick(mMovies.get(adapterPosition));
+        }
     }
 }
