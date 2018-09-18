@@ -1,6 +1,7 @@
 package io.jqn.popularmoviesapp;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
@@ -28,6 +30,7 @@ import java.util.List;
 
 import io.jqn.popularmoviesapp.adapter.ReviewAdapter;
 import io.jqn.popularmoviesapp.adapter.TrailerAdapter;
+import io.jqn.popularmoviesapp.data.MoviesContract;
 import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
 import io.jqn.popularmoviesapp.models.Review;
@@ -80,6 +83,7 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
 
         Picasso.get().load("http://image.tmdb.org/t/p/w1280".concat(mMovie.getBackdropPath())).into(mBackdrop);
         Picasso.get().load("http://image.tmdb.org/t/p/w500".concat(mMovie.getPosterPath())).into(mPosterThumbnail);
+
         setTitle(mMovie.getTitle());
         String userRating = mMovie.getUserRating();
         String newUserRating = userRating + "/10";
@@ -100,7 +104,7 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 /* Create a DB helper (this will crate the DB if run for the first time) */
-                MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
+                //MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
                 SharedPreferences sharedPreferences;
                 if (isChecked) {
                     sharedPreferences = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
@@ -109,8 +113,27 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
                     editor.putBoolean(mMovie.getId(), true);
                     editor.commit();
 
+                    /// New content values object
+                    ContentValues contentValues = new ContentValues();
+
                     // Add to favorites table
-                    db.addFavorite(mMovie.getId(), mMovie.getTitle(), mMovie.getPosterPath(), mMovie.getBackdropPath(), mMovie.getUserRating(), mMovie.getReleaseDate(), mMovie.getOverview());
+                    contentValues.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_ID, mMovie.getId());
+                    contentValues.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_NAME, mMovie.getTitle());
+                    contentValues.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_OVERVIEW, mMovie.getOverview());
+                    contentValues.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_RELEASE_DATE, mMovie.getReleaseDate());
+                    contentValues.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_RATING, mMovie.getUserRating());
+                    contentValues.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_BACKDROP, mMovie.getBackdropPath());
+                    contentValues.put(MoviesContract.FavoritesEntry.COLUMN_MOVIE_POSTER, mMovie.getPosterPath());
+
+                    Uri uri = getContentResolver().insert(MoviesContract.FavoritesEntry.CONTENT_URI, contentValues);
+
+                    //if (uri != null) {
+                    //    Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+                    //}
+
+                    //finish();
+                    //db.addFavorite(mMovie.getId(), mMovie.getTitle(), mMovie.getPosterPath(), mMovie.getBackdropPath(), mMovie.getUserRating(), mMovie.getReleaseDate(), mMovie.getOverview());
+
                 } else {
                     SharedPreferences editor = getSharedPreferences("favoritePrefs", Context.MODE_PRIVATE);
                     SharedPreferences.Editor edit = editor.edit();
@@ -118,7 +141,7 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
                     edit.apply();
 
                     // Remove from favorites table
-                    db.removeFavorite(mMovie.getTitle());
+                    //db.removeFavorite(mMovie.getTitle());
                 }
             }
         });

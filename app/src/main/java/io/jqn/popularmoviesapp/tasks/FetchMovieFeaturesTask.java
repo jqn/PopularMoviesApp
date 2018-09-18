@@ -1,7 +1,6 @@
 package io.jqn.popularmoviesapp.tasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.net.URL;
 import java.util.Collections;

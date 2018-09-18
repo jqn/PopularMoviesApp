@@ -1,9 +1,11 @@
 package io.jqn.popularmoviesapp;
 
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,12 +23,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.jqn.popularmoviesapp.adapter.MovieAdapter;
-import io.jqn.popularmoviesapp.data.MoviesDbHelper;
 import io.jqn.popularmoviesapp.models.Movie;
+import io.jqn.popularmoviesapp.tasks.FetchFavoritesTask;
 import io.jqn.popularmoviesapp.tasks.FetchMoviesTask;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, LoaderManager.LoaderCallbacks<List<Movie>> {
+    // Constants for logging and referring to a unique loader
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int TASK_LOADER_ID = 0;
     /**
      * References to the drawer menu
      */
@@ -42,12 +46,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     /**
      * Provide access to the movie database
      */
-    private MoviesDbHelper mMovieDbHelper;
 
     private GridLayoutManager mGridLayoutManager;
 
+    private int mMovieLoaderId;
+
     static final String FILTER_STATE = "filter";
-    String mFilterState ="popular";
+    String mFilterState = "popular";
 
 
     @Override
@@ -59,11 +64,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setTitle("Popular Movies");
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        /**
-         * Instantiates a subclass of SQLiteOpenHelper to access database
-         * @params - context - the current activity
-         */
-        mMovieDbHelper = new MoviesDbHelper(this);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -142,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             Log.v(TAG, "save state is null ******");
             loadMovieData("movie", "popular");
         }
+        mMovieLoaderId = FetchFavoritesTask.ID;
+        // Setting loaders
+        getSupportLoaderManager().initLoader(mMovieLoaderId, null, this).forceLoad();
 
     }
 
@@ -164,6 +167,27 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
         // If we got here the users's action was not recognized
         return super.onOptionsItemSelected(item);
+    }
+    @NonNull
+    @Override
+    public Loader<List<Movie>> onCreateLoader(int id, @Nullable Bundle args) {
+        return new FetchFavoritesTask(this);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> data) {
+        //After getting result we will update our UI here
+        if (data == null) {
+            return;
+        }
+
+        setMoviePosters(data);
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<List<Movie>> loader) {
+        //Leave it for now as it is
     }
 
     /* Tell the background method to get popular movies in the background */
@@ -239,11 +263,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     protected void getFavorites() {
-        MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
-        List<Movie> movieList = db.getFavorites();
-        setMoviePosters(movieList);
+        mMovieLoaderId = FetchFavoritesTask.ID;
+        if(getSupportLoaderManager().getLoader(mMovieLoaderId) == null) {
+            getSupportLoaderManager().initLoader(mMovieLoaderId, null, this).forceLoad();
+        } else {
+            getSupportLoaderManager().getLoader(mMovieLoaderId).forceLoad();
+        }
+        //MoviesDbHelper db = new MoviesDbHelper(getApplicationContext());
+        //List<Movie> movieList = db.getFavorites();
+        //setMoviePosters(movieList);
         setTitle("Favorites");
-        mFilterState = "favorites";
+        //mFilterState = "favorites";
     }
 
 }
