@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,14 +31,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private static final String TAG = MainActivity.class.getSimpleName();
     // Constants for logging and referring to a unique loader
-    private static final int MOVIE_LOADER = 22;
+    private static final int MOVIE_LOADER = 11;
+    private static final int TOP_RATED_LOADER = 22;
     private static final int FAVORITE_LOADER = 0;
-    /**
-     * References to the drawer menu
+    /*
+      References to the drawer menu
      */
     private DrawerLayout mDrawerLayout;
-    /**
-     * References to RecyclerView and Adapter.
+    /*
+      References to RecyclerView and Adapter.
      */
     private MovieAdapter mMovieAdapter;
     private RecyclerView mRecyclerView;
@@ -47,15 +49,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private GridLayoutManager mGridLayoutManager;
 
     private int mFavoriteLoader;
-    // Queries
-    private static final String SEARCH_QUERY_URL_MOVIE_MEDIA = "movie";
-    private static final String SEARCH_QUERY_URL_FILTER_POPULAR = "popular";
-    private static final String SEARCH_QUERY_URL_FILTER_TOP_RATED = "top_rated";
     // State
     static final String FILTER_STATE = "filter";
     String mFilterState = "popular";
-    private static final String MOVIE_LIST_STATE_KEY = "MOVIE_LIST_STATE";
-    private static Parcelable mMovieListState;
 
     private Parcelable recyclerPosition;
     private static final String RECYCLER_POSITION = "RecyclerViewPosition";
@@ -66,110 +62,73 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setContentView(R.layout.activity_main);
         // Set action bar title
         setTitle("Popular Movies");
-        // Initialize drawer navigation
-        //NavigationView navigationView = findViewById(R.id.nav_view);
-        //navigationView.setNavigationItemSelectedListener(
-        //        new NavigationView.OnNavigationItemSelectedListener() {
-        //            @Override
-        //            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        //                // set item as selected to persist highlight
-        //                item.setChecked(true);
-        //                // close drawer when item is tapped
-        //                mDrawerLayout.closeDrawers();
-        //
-        //                switch (item.getItemId()) {
-        //                    case R.id.set_popular:
-        //                        loadMovieData("movie", "popular");
-        //                        mFilterState = "popular";
-        //                        setActionBarTitle(mFilterState);
-        //                        return true;
-        //                    case R.id.set_trending:
-        //                        //loadMovieData("movie", "top_rated");
-        //                        mFilterState = "top_rated";
-        //                        setActionBarTitle(mFilterState);
-        //                        return true;
-        //                    case R.id.set_favorites:
-        //                        //getFavorites();
-        //                        mFilterState = "favorites";
-        //                        setActionBarTitle(mFilterState);
-        //                        return true;
-        //                }
-        //
-        //                return true;
-        //            }
-        //        }
-        //);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        // set item as selected to persist highlight
+                        item.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        switch (item.getItemId()) {
+                            case R.id.set_popular:
+                                loadMovieData("movie", "popular");
+                                mFilterState = "popular";
+                                setActionBarTitle(mFilterState);
+                                return true;
+                            case R.id.set_trending:
+                                loadMovieData("movie", "top_rated");
+                                mFilterState = "top_rated";
+                                setActionBarTitle(mFilterState);
+                                return true;
+                            case R.id.set_favorites:
+                                getFavorites();
+                                mFilterState = "favorites";
+                                setActionBarTitle(mFilterState);
+                                return true;
+                        }
+
+                        return true;
+                    }
+                }
+        );
         // Bind Views
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mRecyclerView = findViewById(R.id.movies);
         mErrorMessageDisplay = findViewById(R.id.movie_error_message_display);
-
+        // Layout managers
         mGridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
-
-        /**
-         * Use this setting to improve performance that changes in content do not change the child
-         * layout size in the RecyclerView.
+        /*
+          Use this setting to improve performance that changes in content do not change the child
+          layout size in the RecyclerView.
          */
         mRecyclerView.setHasFixedSize(true);
-
-        /**
-         * The movie adapter is responsible for displaying each item in the grid.
+        /*
+          The movie adapter is responsible for displaying each item in the grid.
          */
         mMovieAdapter = new MovieAdapter(this);
-        /**
-         * Setting the adapter attaches it to the RecyclerView in the layout.
+        /*
+          Setting the adapter attaches it to the RecyclerView in the layout.
          */
         mRecyclerView.setAdapter(mMovieAdapter);
-
-        /**
-         * The ProgressBar that will indicate to the user that we are loading data. It will be
-         * hidden when no data is loading.
-         *
-         * Please note: This so called "ProgressBar" isn't a bar by default.
+        /*
+          The ProgressBar that will indicate to the user that we are loading data. It will be
+          hidden when no data is loading.
+          Please note: This so called "ProgressBar" isn't a bar by default.
          */
         mLoadingIndicator = findViewById(R.id.grid_loading_indicator);
-
+        //Initialize loaders
         getSupportLoaderManager().initLoader(MOVIE_LOADER, null, this);
-        Log.v(TAG, "* oncreate called ");
-
-        //if (savedInstanceState != null) {
-        //    Log.v(TAG, "* oncreate saved state in not null");
-        //    getSupportLoaderManager().restartLoader(MOVIE_LOADER, null, this);
-        //    //getSupportLoaderManager().getLoader(MOVIE_LOADER);
-        //} else {
-        //    Log.v(TAG, "* oncreate saved state in null");
-        //    getSupportLoaderManager().initLoader(MOVIE_LOADER, null, this);
-        //
-        //}
-        //} else {
-        //
-        //}
-        //getSupportLoaderManager().initLoader(MOVIE_LOADER, null, this);
-        //    mFilterState = savedInstanceState.getString(FILTER_STATE);
-        //    if (mFilterState.equals("favorites")) {
-        //        setActionBarTitle(mFilterState);
-        //        getFavorites();
-        //    } else {
-        //        loadMovieData("movie", mFilterState);
-        //        setActionBarTitle(mFilterState);
-        //    }
-        //} else {
-        //    loadMovieData("movie", "popular");
-        //}
-        //mFavoriteLoader = FetchFavoritesTask.ID;
-        // Initialize loaders
-        //getSupportLoaderManager().initLoader(MOVIE_LOADER, null, this).forceLoad();
-        //Log.v(TAG, "oncreate initialize loader ");
-        //getSupportLoaderManager().initLoader(MOVIE_LOADER, null, this);
-        //loadMovieData("movie", mFilterState);
 
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.v(TAG, "onSaveInstanceState called");
         super.onSaveInstanceState(outState);
+        outState.putString(FILTER_STATE, mFilterState);
         outState.putParcelable(RECYCLER_POSITION,
                 mRecyclerView.getLayoutManager().onSaveInstanceState());
     }
@@ -177,18 +136,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_POSITION)) {
-            recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
-            Log.v(TAG, "onSaveInstanceState called" + recyclerPosition);
-
+        mFilterState = savedInstanceState.getString(FILTER_STATE);
+        recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
+        if (mFilterState.equals("top_rated")) {
+            loadMovieData("movie", "top_rated");
+        } else if (mFilterState.equals("favorites")) {
+            loadMovieData("movie", "favorites");
+        } else {
+            loadMovieData("movie", "popular");
         }
     }
 
-
     @Override
-    protected void onStart() {
-        super.onStart();
-        Log.v(TAG, "on start called");
+    protected void onResume() {
+        super.onResume();
+        if (recyclerPosition != null) {
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerPosition);
+        }
     }
 
 
@@ -197,29 +161,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         // Inflate menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity_actions, menu);
-
-        MenuItem popular = menu.getItem(0);
-        MenuItem top_rated = menu.getItem(1);
-        MenuItem favorite = menu.getItem(2);
-
-
-        // Check the correct radio button in the menu.
-        switch (mFilterState) {
-            case "popular":
-                popular.setChecked(true);
-                break;
-        }
-        //inflater.inflate(R.menu.main_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_popular:
-                //mDrawerLayout.openDrawer(GravityCompat.START);
+            case R.id.action_settings:
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-
         }
         // If we got here the users's action was not recognized
         return super.onOptionsItemSelected(item);
@@ -228,43 +178,42 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @NonNull
     @Override
     public Loader<List<Movie>> onCreateLoader(int id, @Nullable Bundle args) {
-        Log.v(TAG, "* oncreate loader called ");
-
-        //showLoadingIndicator();
+        showLoadingIndicator();
         if (id == MOVIE_LOADER) {
             return new FetchMoviesTaskLoader(this, "popular");
-        } else if (id == FAVORITE_LOADER) {
+        } else if (id == TOP_RATED_LOADER) {
+            return new FetchMoviesTaskLoader(this, "top_rated");
+        } else {
             return new FetchFavoritesTask(this);
         }
-        return null;
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> data) {
-        Log.v(TAG, "* onLoadFinished loader called ");
-
         //After getting result we will update our UI here
         if (data == null) {
-            hideLoadingIndicator();
             return;
         }
-
         setMoviePosters(data);
-        //restoreLayoutManagerPosition();
+        hideLoadingIndicator();
 
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<List<Movie>> loader) {
-        Log.v(TAG, "* onloader reset loader called ");
-
         //Leave it for now as it is
-        //restoreLayoutManagerPosition();
     }
 
     /* Tell the background method to get popular movies in the background */
     private void loadMovieData(String media, String filter) {
-        getSupportLoaderManager().initLoader(MOVIE_LOADER, null, this);
+        if (filter.equals("top_rated")) {
+            getSupportLoaderManager().initLoader(TOP_RATED_LOADER, null, this);
+
+        } else if (filter.equals("favorites")) {
+            getSupportLoaderManager().initLoader(FAVORITE_LOADER, null, this);
+        } else {
+            getSupportLoaderManager().initLoader(MOVIE_LOADER, null, this);
+        }
 
     }
 
@@ -298,45 +247,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void showMovieDataView() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
-        Log.v(TAG, "* setting movie views");
-
     }
 
     public void setMoviePosters(List<Movie> movieData) {
         mMovieAdapter.setMoviePosters(movieData);
         mMovieAdapter.notifyDataSetChanged();
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        Log.i("tag", "This'll run 300 milliseconds later");
-                        mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerPosition);
-                    }
-                },
-                200);
-        //hideLoadingIndicator();
-        //if (recyclerPosition != null) {
-        //    //getSupportLoaderManager().restartLoader(MOVIE_LOADER, null, this);
-        //    mGridLayoutManager.onRestoreInstanceState(recyclerPosition);
-        //}
-        //
-        //if (recyclerPosition != null) {
-        //    Log.v(TAG, "* list state is not null");
-        //    mMovieAdapter.notifyDataSetChanged();
-        //    new android.os.Handler().postDelayed(
-        //            new Runnable() {
-        //                public void run() {
-        //                    Log.i("tag", "This'll run 300 milliseconds later");
-        //                    mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerPosition);
-        //                }
-        //            },
-        //            2000);
-        //
-        //} else {
-        //    Log.v(TAG, "* list state is null");
-        //    mMovieAdapter.notifyDataSetChanged();
-        //
-        //}
-
+        if (recyclerPosition != null) {
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerPosition);
+        }
     }
 
     /**

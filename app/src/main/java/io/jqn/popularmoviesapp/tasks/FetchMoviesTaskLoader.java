@@ -27,13 +27,9 @@ public class FetchMoviesTaskLoader extends AsyncTaskLoader<List<Movie>> {
 
     @Override
     protected void onStartLoading() {
-        //forceLoad();
         if (mGithubJson != null) {
-            Log.v(TAG, "* json cached");
             deliverResult(mGithubJson);
         } else {
-            Log.v(TAG, "* json not cached");
-
             forceLoad();
         }
     }
@@ -45,7 +41,6 @@ public class FetchMoviesTaskLoader extends AsyncTaskLoader<List<Movie>> {
         }
         URL moviesRequestUrl = NetworkUtils.buildURL("movie", mFilter);
         try {
-            Log.v(TAG, "* calling for json");
             String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
 
             List<Movie> movieJsonData = MoviesJsonUtils.getMoviesStringsFromJson(jsonMovieResponse);
@@ -61,8 +56,6 @@ public class FetchMoviesTaskLoader extends AsyncTaskLoader<List<Movie>> {
     @Override
     public void deliverResult(List<Movie> githubJson) {
         mGithubJson = githubJson;
-        Log.v(TAG, "* delivering result " + mGithubJson);
-
         super.deliverResult(githubJson);
     }
 }

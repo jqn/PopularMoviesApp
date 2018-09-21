@@ -107,10 +107,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      */
     public void setMoviePosters(List<Movie> movies) {
         mMovies = movies;
-        Log.v(TAG, " * adapter setting movies");
-        Log.v(TAG, "*************");
-
-        //notifyDataSetChanged();
     }
 
     /**
@@ -137,7 +133,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-
             mClickHandler.onClick(mMovies.get(adapterPosition));
         }
     }

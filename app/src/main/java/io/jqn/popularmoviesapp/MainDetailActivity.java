@@ -74,11 +74,7 @@ public class MainDetailActivity extends AppCompatActivity implements TrailerAdap
         mDateReleased = findViewById(R.id.release_date);
         mOverview = findViewById(R.id.overview);
 
-        if (savedInstanceState != null) {
-            mMovie = (Movie) savedInstanceState.getSerializable("MOVIE");
-        } else {
-            mMovie = (Movie) getIntent().getExtras().getSerializable("movie");
-        }
+        mMovie = (Movie) getIntent().getExtras().getSerializable("movie");
 
         Picasso.get().load("http://image.tmdb.org/t/p/w1280".concat(mMovie.getBackdropPath())).into(mBackdrop);
         Picasso.get().load("http://image.tmdb.org/t/p/w500".concat(mMovie.getPosterPath())).into(mPosterThumbnail);

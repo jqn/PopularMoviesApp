@@ -43,7 +43,6 @@ public class FetchFavoritesTask extends AsyncTaskLoader<List<Movie>> {
             e.printStackTrace();
             return null;
         }
-        Log.v(TAG, "favorites " + list);
         return list;
     }
 
