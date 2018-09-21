@@ -25,7 +25,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        this.mainActivity.showLoadingIndicator();
+        //this.mainActivity.showLoadingIndicator();
     }
 
     @Override
@@ -62,8 +62,8 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         } else {
             this.mainActivity.showErrorMessage();
         }
-
-
     }
+
+
 
 }

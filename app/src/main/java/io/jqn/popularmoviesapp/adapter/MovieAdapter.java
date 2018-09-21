@@ -2,6 +2,7 @@ package io.jqn.popularmoviesapp.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import io.jqn.popularmoviesapp.MainActivity;
 import io.jqn.popularmoviesapp.R;
 import io.jqn.popularmoviesapp.models.Movie;
 
@@ -24,6 +26,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      */
     private final MovieAdapterOnClickHandler mClickHandler;
     private List<Movie> mMovies;
+    MainActivity mainActivity;
+
 
     /**
      * Creates a MovieAdapter.
@@ -33,6 +37,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      */
     public MovieAdapter(MovieAdapterOnClickHandler clickHandler) {
         this.mClickHandler = clickHandler;
+        this.mainActivity = mainActivity;
     }
 
     /**
@@ -78,6 +83,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
          * TODO - remove hardcoded poster url
          */
         Picasso.get().load("http://image.tmdb.org/t/p/w780".concat(mMoviePosterPath)).into(movieAdapterViewHolder.mMoviePosterImageView);
+
     }
 
     /**
@@ -101,7 +107,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      */
     public void setMoviePosters(List<Movie> movies) {
         mMovies = movies;
-        notifyDataSetChanged();
+        Log.v(TAG, " * adapter setting movies");
+        Log.v(TAG, "*************");
+
+        //notifyDataSetChanged();
     }
 
     /**
@@ -111,9 +120,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         void onClick(Movie movie);
     }
 
-    /**
-     * Cache the children views for a forecast grid item
-     */
     public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final ImageView mMoviePosterImageView;
 
