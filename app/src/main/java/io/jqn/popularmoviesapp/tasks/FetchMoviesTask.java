@@ -35,9 +35,9 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             return null;
         }
 
-        String mediatType = params[0];
+        String mediaType = params[0];
         String contentType = params[1];
-        URL moviesRequestUrl = NetworkUtils.buildURL(mediatType, contentType);
+        URL moviesRequestUrl = NetworkUtils.buildURL(mediaType, contentType);
 
         try {
             String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);

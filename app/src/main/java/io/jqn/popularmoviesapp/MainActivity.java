@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,11 +26,14 @@ import io.jqn.popularmoviesapp.adapter.MovieAdapter;
 import io.jqn.popularmoviesapp.models.Movie;
 import io.jqn.popularmoviesapp.tasks.FetchFavoritesTask;
 import io.jqn.popularmoviesapp.tasks.FetchMoviesTask;
+import io.jqn.popularmoviesapp.tasks.FetchMoviesTaskLoader;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, LoaderManager.LoaderCallbacks<List<Movie>> {
-    // Constants for logging and referring to a unique loader
+
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int MOVIE_LOADER_ID = 0;
+    // Constants for logging and referring to a unique loader
+    private static final int MOVIE_LOADER = 22;
+    private static final int FAVORITE_LOADER = 0;
     /**
      * References to the drawer menu
      */
@@ -44,10 +48,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private ProgressBar mLoadingIndicator;
     private GridLayoutManager mGridLayoutManager;
 
-    private int mMovieLoaderId;
+    private int mFavoriteLoader;
 
     static final String FILTER_STATE = "filter";
     String mFilterState = "popular";
+    // Queries
+    private static final String SEARCH_QUERY_URL_MOVIE_MEDIA = "movie";
+    private static final String SEARCH_QUERY_URL_FILTER_POPULAR = "popular";
+    private static final String SEARCH_QUERY_URL_FILTER_TOP_RATED = "top_rated";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,9 +146,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         } else {
             loadMovieData("movie", "popular");
         }
-        mMovieLoaderId = FetchFavoritesTask.ID;
-        // Setting loaders
-        getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, null, this).forceLoad();
+        mFavoriteLoader = FetchFavoritesTask.ID;
+        // Initialize loaders
+        getSupportLoaderManager().initLoader(MOVIE_LOADER, null, this).forceLoad();
+
+        loadMovieData("movie", "popular");
 
     }
 
@@ -168,7 +178,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @NonNull
     @Override
     public Loader<List<Movie>> onCreateLoader(int id, @Nullable Bundle args) {
-        return new FetchFavoritesTask(this);
+        Log.v(TAG, "loader id" + id);
+        if (id == MOVIE_LOADER) {
+            return new FetchMoviesTaskLoader(this, "popular");
+        } else if (id == FAVORITE_LOADER) {
+            return new FetchFavoritesTask(this);
+        }
+        return null;
     }
 
     @Override
@@ -189,7 +205,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     /* Tell the background method to get popular movies in the background */
     private void loadMovieData(String media, String filter) {
-        new FetchMoviesTask(this).execute(media, filter);
+        //new FetchMoviesTask(this).execute(media, filter);
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(SEARCH_QUERY_URL_MOVIE_MEDIA, filter);
+        getSupportLoaderManager().initLoader(MOVIE_LOADER, queryBundle, this).forceLoad();
+
     }
 
     /**
@@ -257,10 +277,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     protected void getFavorites() {
-        if (getSupportLoaderManager().getLoader(mMovieLoaderId) == null) {
-            getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, null, this).forceLoad();
+        if (getSupportLoaderManager().getLoader(mFavoriteLoader) == null) {
+            getSupportLoaderManager().initLoader(FAVORITE_LOADER, null, this).forceLoad();
         } else {
-            getSupportLoaderManager().getLoader(MOVIE_LOADER_ID).forceLoad();
+            getSupportLoaderManager().getLoader(FAVORITE_LOADER).forceLoad();
         }
     }
 
